@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>卡车助手 - 悬浮入口嵌入现有页面</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", sans-serif; background: #e8e8e8; display: flex; justify-content: center; align-items: center; min-height: 100vh; gap: 30px; flex-wrap: wrap; padding: 20px; }
+.phone { width: 375px; height: 812px; background: #f5f5f5; border-radius: 40px; overflow: hidden; position: relative; box-shadow: 0 0 30px rgba(0,0,0,0.18); border: 3px solid #222; display: flex; flex-direction: column; }
+.phone-label { text-align: center; font-size: 14px; font-weight: 600; color: #666; margin-bottom: 8px; }
+.phone-wrapper { display: flex; flex-direction: column; align-items: center; }
+
+/* ========= PAGE 1: 车辆状态首页 ========= */
+.page1 { background: #f5f6f8; }
+.page1 .status-bar { background: #fff; padding: 8px 20px; display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: #333; }
+.page1 .status-bar .right { display: flex; gap: 4px; font-size: 12px; }
+.page1 .vehicle-header { background: #fff; padding: 8px 20px 16px; border-bottom: 1px solid #f0f0f0; }
+.page1 .vehicle-header .plate { font-size: 22px; font-weight: 700; color: #1a1a1a; }
+.page1 .vehicle-header .location { font-size: 12px; color: #999; margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+.page1 .vehicle-header .loc-icon { font-size: 14px; }
+
+.page1 .status-section { background: #fff; margin: 8px 16px; border-radius: 12px; padding: 16px; }
+.page1 .status-section .status-row { display: flex; align-items: center; justify-content: space-between; }
+.page1 .status-tag { background: #e8f5e9; color: #2e7d32; padding: 4px 12px; border-radius: 12px; font-size: 13px; font-weight: 500; }
+.page1 .parking-btn { display: flex; align-items: center; gap: 6px; background: #f0f7ff; color: #1a73e8; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500; cursor: pointer; border: none; }
+.page1 .modes { display: flex; gap: 6px; margin-top: 12px; }
+.page1 .mode { flex: 1; text-align: center; padding: 8px 0; border-radius: 8px; font-size: 12px; color: #666; background: #f5f5f5; cursor: pointer; }
+.page1 .mode.active { background: #1a73e8; color: #fff; }
+
+.page1 .health-cards { display: flex; gap: 10px; margin: 8px 16px; }
+.page1 .health-card { flex: 1; background: #fff; border-radius: 12px; padding: 14px; }
+.page1 .health-card .card-title { font-size: 14px; font-weight: 600; color: #333; margin-bottom: 10px; }
+.page1 .health-card .no-data { font-size: 13px; color: #ccc; }
+.page1 .health-card .severity-bars { display: flex; gap: 3px; margin-top: 8px; }
+.page1 .health-card .severity-bar { height: 4px; flex: 1; border-radius: 2px; background: #eee; }
+
+.page1 .mileage-section { margin: 8px 16px; background: #fff; border-radius: 12px; padding: 20px; text-align: center; }
+.page1 .mileage-section .mileage-label { font-size: 13px; color: #999; }
+.page1 .mileage-section .mileage-value { font-size: 36px; font-weight: 700; color: #1a1a1a; margin: 4px 0; }
+.page1 .mileage-section .mileage-unit { font-size: 14px; color: #999; }
+
+.page1 .trip-cards { display: flex; gap: 10px; margin: 8px 16px; }
+.page1 .trip-card { flex: 1; background: #fff; border-radius: 12px; padding: 14px; text-align: center; }
+.page1 .trip-card .trip-value { font-size: 20px; font-weight: 700; color: #333; }
+.page1 .trip-card .trip-label { font-size: 11px; color: #999; margin-top: 4px; }
+
+.page1 .tab-bar { background: #fff; display: flex; border-top: 1px solid #eee; padding: 8px 0 20px; margin-top: auto; }
+.page1 .tab-item { flex: 1; text-align: center; font-size: 11px; color: #999; cursor: pointer; }
+.page1 .tab-item .tab-icon { font-size: 20px; display: block; margin-bottom: 2px; }
+.page1 .tab-item.active { color: #1a73e8; }
+
+/* ========= PAGE 2: 我的页面 ========= */
+.page2 { background: #f5f6f8; }
+.page2 .welcome-section { background: linear-gradient(135deg, #1a237e, #283593); padding: 30px 20px 24px; color: #fff; }
+.page2 .welcome-section .greeting { font-size: 24px; font-weight: 700; }
+.page2 .welcome-section .brand { font-size: 14px; opacity: 0.8; margin-top: 4px; }
+.page2 .member-card { background: rgba(255,255,255,0.12); border-radius: 12px; padding: 16px; margin-top: 16px; display: flex; justify-content: space-around; text-align: center; }
+.page2 .member-card .stat-value { font-size: 22px; font-weight: 700; }
+.page2 .member-card .stat-label { font-size: 11px; opacity: 0.7; margin-top: 2px; }
+.page2 .member-card .divider { width: 1px; background: rgba(255,255,255,0.2); }
+
+.page2 .city-entry { background: #fff; margin: 0 16px; border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; margin-top: -8px; position: relative; z-index: 1; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.page2 .city-entry .city-icon { width: 40px; height: 40px; border-radius: 10px; background: #fff3e0; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.page2 .city-entry .city-text { flex: 1; }
+.page2 .city-entry .city-title { font-size: 15px; font-weight: 600; color: #333; }
+.page2 .city-entry .city-desc { font-size: 12px; color: #999; }
+.page2 .city-entry .city-arrow { color: #ccc; }
+
+.page2 .menu-list { margin: 16px; background: #fff; border-radius: 12px; overflow: hidden; }
+.page2 .menu-item { display: flex; align-items: center; padding: 14px 16px; border-bottom: 1px solid #f5f5f5; cursor: pointer; }
+.page2 .menu-item:last-child { border-bottom: none; }
+.page2 .menu-item .menu-icon { width: 24px; height: 24px; margin-right: 12px; font-size: 18px; text-align: center; }
+.page2 .menu-item .menu-text { flex: 1; font-size: 14px; color: #333; }
+.page2 .menu-item .menu-badge { background: #e53935; color: #fff; font-size: 10px; padding: 2px 8px; border-radius: 10px; }
+.page2 .menu-item .menu-arrow { color: #ccc; font-size: 14px; }
+
+.page2 .tab-bar { background: #fff; display: flex; border-top: 1px solid #eee; padding: 8px 0 20px; margin-top: auto; }
+.page2 .tab-item { flex: 1; text-align: center; font-size: 11px; color: #999; cursor: pointer; }
+.page2 .tab-item .tab-icon { font-size: 20px; display: block; margin-bottom: 2px; }
+.page2 .tab-item.active { color: #1a73e8; }
+
+/* ========= Floating AI Button ========= */
+.fab-ai { position: absolute; bottom: 90px; right: 20px; width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #1a73e8, #4a90d9); box-shadow: 0 6px 20px rgba(26,115,232,0.35); z-index: 100; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
+.fab-ai:hover { transform: scale(1.08); }
+.fab-ai:active { transform: scale(0.95); }
+.fab-ai .robot { font-size: 28px; }
+.fab-ai .badge-dot { position: absolute; top: 4px; right: 4px; width: 10px; height: 10px; border-radius: 50%; background: #e53935; border: 2px solid #fff; }
+
+/* Pulse animation */
+.fab-ai.pulse { animation: pulse 2s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 6px 20px rgba(26,115,232,0.35); } 50% { box-shadow: 0 6px 30px rgba(26,115,232,0.55); } 100% { box-shadow: 0 6px 20px rgba(26,115,232,0.35); } }
+
+/* Tooltip */
+.fab-tooltip { position: absolute; bottom: 70px; right: 10px; background: rgba(0,0,0,0.75); color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 12px; white-space: nowrap; z-index: 101; animation: fadeInOut 4s forwards; pointer-events: none; }
+.fab-tooltip::after { content: ''; position: absolute; bottom: -6px; right: 18px; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 6px solid rgba(0,0,0,0.75); }
+@keyframes fadeInOut { 0% { opacity: 0; transform: translateY(10px); } 10% { opacity: 1; transform: translateY(0); } 80% { opacity: 1; } 100% { opacity: 0; } }
+
+/* ========= AI Chat Overlay ========= */
+.chat-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #f5f5f5; z-index: 200; display: none; flex-direction: column; }
+.chat-overlay.show { display: flex; }
+.chat-header { background: #fff; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e0e0e0; }
+.chat-header .back { font-size: 18px; color: #333; cursor: pointer; }
+.chat-header .vehicle { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #333; font-weight: 500; cursor: pointer; }
+.chat-header .vehicle .arrow { font-size: 10px; color: #999; }
+.chat-header .new-chat { font-size: 13px; color: #1a73e8; cursor: pointer; }
+.chat-body { flex: 1; overflow-y: auto; padding: 16px; }
+.chat-input-area { background: #fff; border-top: 1px solid #e0e0e0; padding: 10px 16px; display: flex; align-items: flex-end; gap: 8px; padding-bottom: 20px; }
+.chat-input { flex: 1; border: 1px solid #e0e0e0; border-radius: 20px; padding: 10px 16px; font-size: 14px; outline: none; resize: none; max-height: 100px; background: #f9f9f9; }
+.chat-input:focus { border-color: #1a73e8; background: #fff; }
+.send-btn { width: 36px; height: 36px; border-radius: 50%; background: #ccc; border: none; color: #fff; font-size: 16px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.send-btn.active { background: #1a73e8; }
+
+.welcome-area { text-align: center; padding: 30px 0 16px; }
+.welcome-area .robot-icon { font-size: 48px; margin-bottom: 10px; }
+.welcome-area .welcome-text { font-size: 18px; font-weight: 600; color: #333; }
+.welcome-cards { display: flex; gap: 8px; overflow-x: auto; padding: 0 0 10px; scrollbar-width: none; }
+.welcome-card { flex-shrink: 0; background: #fff; border-radius: 12px; padding: 12px 16px; font-size: 13px; color: #333; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.06); white-space: nowrap; }
+.category-tabs { display: flex; gap: 8px; padding: 8px 0; overflow-x: auto; }
+.category-tab { padding: 6px 16px; border-radius: 16px; font-size: 12px; white-space: nowrap; cursor: pointer; background: #f0f0f0; color: #666; }
+.category-tab.active { background: #1a73e8; color: #fff; }
+.faq-list { display: flex; flex-direction: column; gap: 6px; }
+.faq-item { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #fff; border-radius: 10px; font-size: 13px; color: #333; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+.faq-item .q-icon { width: 20px; height: 20px; border-radius: 50%; background: #e8f0fe; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #1a73e8; flex-shrink: 0; }
+.keyword-row { display: flex; gap: 6px; padding: 8px 0; overflow-x: auto; }
+.keyword-tag { flex-shrink: 0; padding: 6px 14px; border-radius: 16px; background: #fff3e0; color: #e65100; font-size: 12px; cursor: pointer; border: 1px solid #ffe0b2; white-space: nowrap; }
+
+.user-msg { display: flex; justify-content: flex-end; margin: 4px 0; }
+.user-msg .bubble { background: #1a73e8; color: #fff; padding: 10px 14px; border-radius: 18px 18px 4px 18px; max-width: 75%; font-size: 14px; line-height: 1.5; }
+.ai-msg { display: flex; justify-content: flex-start; margin: 4px 0; }
+.ai-msg .bubble { background: #fff; color: #333; padding: 10px 14px; border-radius: 18px 18px 18px 4px; max-width: 85%; font-size: 14px; line-height: 1.5; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+.ai-msg .bubble .disclaimer { font-size: 10px; color: #999; margin-top: 6px; padding-top: 6px; border-top: 1px solid #f0f0f0; }
+
+.msg-actions { display: flex; gap: 14px; padding: 4px 0 8px; }
+.msg-action { font-size: 12px; color: #999; cursor: pointer; }
+.msg-action.active { color: #1a73e8; font-weight: 600; }
+
+.thinking { padding: 12px 16px; background: #fff; border-radius: 18px 18px 18px 4px; max-width: 180px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+.thinking .dots { display: flex; gap: 4px; }
+.thinking .dot { width: 7px; height: 7px; border-radius: 50%; background: #ccc; animation: bounce 1.4s infinite; }
+.thinking .dot:nth-child(2) { animation-delay: 0.2s; }
+.thinking .dot:nth-child(3) { animation-delay: 0.4s; }
+.thinking .status { font-size: 11px; color: #999; margin-top: 4px; }
+@keyframes bounce { 0%, 80%, 100% { transform: scale(0.6); } 40% { transform: scale(1); } }
+
+.stop-btn { text-align: center; margin: 6px 0; }
+.stop-btn span { font-size: 11px; color: #999; cursor: pointer; padding: 4px 12px; border: 1px solid #e0e0e0; border-radius: 12px; }
+
+.rejection { background: #fff; border-radius: 12px; padding: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); max-width: 85%; }
+.rejection .text { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 10px; }
+.rejection .suggestion { padding: 10px 14px; background: #f5f8ff; border-radius: 10px; font-size: 13px; color: #1a73e8; cursor: pointer; margin-bottom: 6px; }
+
+.privacy-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 210; display: none; align-items: center; justify-content: center; }
+.privacy-overlay.show { display: flex; }
+.privacy-modal { background: #fff; border-radius: 16px; padding: 24px; margin: 24px; }
+.privacy-modal .title { font-size: 16px; font-weight: 600; text-align: center; margin-bottom: 12px; }
+.privacy-modal .content { font-size: 12px; color: #666; line-height: 1.6; max-height: 150px; overflow-y: auto; margin-bottom: 16px; }
+.privacy-modal .btns { display: flex; gap: 12px; }
+.privacy-modal .btn { flex: 1; padding: 10px 0; border-radius: 20px; font-size: 14px; cursor: pointer; border: none; text-align: center; }
+.privacy-modal .btn-agree { background: #1a73e8; color: #fff; }
+.privacy-modal .btn-disagree { background: #f0f0f0; color: #666; }
+
+.toast { position: absolute; bottom: 120px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); color: #fff; padding: 8px 20px; border-radius: 20px; font-size: 13px; z-index: 220; display: none; }
+</style>
+</head>
+<body>
+
+<!-- ====== PHONE 1: 车辆状态首页 ====== -->
+<div class="phone-wrapper">
+  <div class="phone-label">页面一：车辆状态首页</div>
+  <div class="phone page1">
+    <div class="status-bar">
+      <span>9:41</span>
+      <span class="right">📶 📶 📶 🔋 85%</span>
+    </div>
+
+    <div class="vehicle-header">
+      <div class="plate">沪C****3</div>
+      <div class="location"><span class="loc-icon">📍</span> 上海静安区恒通路318号附近</div>
+    </div>
+
+    <div class="status-section">
+      <div class="status-row">
+        <span class="status-tag">已熄火</span>
+        <button class="parking-btn">🌡️ 驻车调温</button>
+      </div>
+      <div class="modes">
+        <div class="mode">ECO</div>
+        <div class="mode active">制冷</div>
+        <div class="mode">强力</div>
+        <div class="mode">制热</div>
+      </div>
+    </div>
+
+    <div class="health-cards">
+      <div class="health-card">
+        <div class="card-title">车辆状态</div>
+        <div class="no-data">暂无数据</div>
+      </div>
+      <div class="health-card">
+        <div class="card-title">车辆健康</div>
+        <div class="no-data">暂无数据</div>
+        <div class="severity-bars">
+          <div class="severity-bar"></div><div class="severity-bar"></div><div class="severity-bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mileage-section">
+      <div class="mileage-label">行驶总里程</div>
+      <div class="mileage-value">209,903</div>
+      <div class="mileage-unit">公里</div>
+    </div>
+
+    <div class="trip-cards">
+      <div class="trip-card"><div class="trip-value">350</div><div class="trip-label">日里程(公里)</div></div>
+      <div class="trip-card"><div class="trip-value">33.2</div><div class="trip-label">百公里油耗(升)</div></div>
+      <div class="trip-card"><div class="trip-value">4.5</div><div class="trip-label">日行驶时长(时)</div></div>
+    </div>
+
+    <div class="tab-bar">
+      <div class="tab-item active"><span class="tab-icon">🚗</span>车辆</div>
+      <div class="tab-item"><span class="tab-icon">🔧</span>服务</div>
+      <div class="tab-item"><span class="tab-icon">👤</span>我的</div>
+    </div>
+
+    <!-- Floating AI Button -->
+    <div class="fab-ai pulse" onclick="openChat(this)" title="AI助手">
+      <span class="robot">🤖</span>
+    </div>
+
+    <!-- Chat Overlay -->
+    <div class="chat-overlay" id="chat1">
+      <div class="chat-header">
+        <span class="back" onclick="closeChat(event, 'chat1')">←</span>
+        <span class="vehicle">沪C****3 NEXT ERA<span class="arrow"> ▼</span></span>
+        <span class="new-chat">新对话</span>
+      </div>
+      <div class="chat-body">
+        <div class="welcome-area">
+          <div class="robot-icon">🤖</div>
+          <div class="welcome-text">你好，我是卡车助手，有什么可以帮你的？</div>
+        </div>
+        <div class="welcome-cards">
+          <div class="welcome-card">如何调节方向盘高度？</div>
+          <div class="welcome-card">仪表盘报警灯亮了怎么办？</div>
+          <div class="welcome-card">车辆充电注意事项有哪些？</div>
+          <div class="welcome-card">如何查看车辆续航里程？</div>
+        </div>
+        <div class="keyword-row">
+          <div class="keyword-tag">体验数字钥匙</div>
+          <div class="keyword-tag">新车交付指南</div>
+        </div>
+        <div class="category-tabs">
+          <div class="category-tab active">车书</div>
+          <div class="category-tab">保养</div>
+          <div class="category-tab">用车</div>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item"><span class="q-icon">?</span>如何换挡？</div>
+          <div class="faq-item"><span class="q-icon">?</span>如何实名认证？</div>
+          <div class="faq-item"><span class="q-icon">?</span>为什么要实名认证？</div>
+          <div class="faq-item"><span class="q-icon">?</span>如何调节后视镜？</div>
+        </div>
+      </div>
+      <div class="chat-input-area">
+        <textarea class="chat-input" placeholder="输入您的问题，例如：如何调节方向盘高度？" rows="1"></textarea>
+        <button class="send-btn">→</button>
+      </div>
+    </div>
+
+    <!-- Privacy overlay -->
+    <div class="privacy-overlay" id="privacy1">
+      <div class="privacy-modal">
+        <div class="title">隐私协议</div>
+        <div class="content">
+          感谢您使用卡车助手。我们重视您的隐私和数据安全。<br><br>
+          1. 数据采集：当您使用AI问答功能时，我们会采集您的对话内容、FAQ点击数据，用于优化答案质量。<br><br>
+          2. 数据安全：您的个人信息和车辆数据将受到严格保护，不会泄露给第三方。
+        </div>
+        <div class="btns">
+          <button class="btn btn-disagree" onclick="closePrivacy('privacy1')">不同意</button>
+          <button class="btn btn-agree" onclick="agreePrivacy('privacy1','chat1')">同意</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast1">已复制</div>
+  </div>
+</div>
+
+<!-- ====== PHONE 2: 我的页面 ====== -->
+<div class="phone-wrapper">
+  <div class="phone-label">页面二：我的页面</div>
+  <div class="phone page2">
+    <div class="welcome-section">
+      <div class="greeting">你好！</div>
+      <div class="brand">开启 NEXTERA 体验</div>
+      <div class="member-card">
+        <div><div class="stat-value">20个</div><div class="stat-label">点亮城市</div></div>
+        <div class="divider"></div>
+        <div><div class="stat-value">2天</div><div class="stat-label">今天是你加入的</div></div>
+      </div>
+    </div>
+
+    <div class="city-entry">
+      <div class="city-icon">🏙️</div>
+      <div class="city-text">
+        <div class="city-title">点亮城市</div>
+        <div class="city-desc">探索更多城市，解锁专属权益</div>
+      </div>
+      <span class="city-arrow">›</span>
+    </div>
+
+    <div class="menu-list">
+      <div class="menu-item"><span class="menu-icon">🚗</span><span class="menu-text">我的车辆</span><span class="menu-arrow">›</span></div>
+      <div class="menu-item"><span class="menu-icon">📚</span><span class="menu-text">智驾学堂</span><span class="menu-arrow">›</span></div>
+      <div class="menu-item"><span class="menu-icon">🪪</span><span class="menu-text">车联网卡实名认证</span><span class="menu-badge">待办</span><span class="menu-arrow">›</span></div>
+      <div class="menu-item"><span class="menu-icon">📋</span><span class="menu-text">我的订单</span><span class="menu-arrow">›</span></div>
+      <div class="menu-item"><span class="menu-icon">📞</span><span class="menu-text">联系我们</span><span class="menu-arrow">›</span></div>
+    </div>
+
+    <div class="tab-bar">
+      <div class="tab-item"><span class="tab-icon">🚗</span>车辆</div>
+      <div class="tab-item"><span class="tab-icon">🔧</span>服务</div>
+      <div class="tab-item active"><span class="tab-icon">👤</span>我的</div>
+    </div>
+
+    <!-- Floating AI Button -->
+    <div class="fab-ai pulse" onclick="openChat(this)" title="AI助手">
+      <span class="robot">🤖</span>
+    </div>
+
+    <!-- Chat Overlay -->
+    <div class="chat-overlay" id="chat2">
+      <div class="chat-header">
+        <span class="back" onclick="closeChat(event, 'chat2')">←</span>
+        <span class="vehicle">沪C****3 NEXT ERA<span class="arrow"> ▼</span></span>
+        <span class="new-chat">新对话</span>
+      </div>
+      <div class="chat-body">
+        <div class="welcome-area">
+          <div class="robot-icon">🤖</div>
+          <div class="welcome-text">你好，我是卡车助手，有什么可以帮你的？</div>
+        </div>
+        <div class="welcome-cards">
+          <div class="welcome-card">如何调节方向盘高度？</div>
+          <div class="welcome-card">仪表盘报警灯亮了怎么办？</div>
+          <div class="welcome-card">车辆充电注意事项有哪些？</div>
+          <div class="welcome-card">如何查看车辆续航里程？</div>
+        </div>
+        <div class="keyword-row">
+          <div class="keyword-tag">体验数字钥匙</div>
+          <div class="keyword-tag">新车交付指南</div>
+        </div>
+        <div class="category-tabs">
+          <div class="category-tab active">车书</div>
+          <div class="category-tab">保养</div>
+          <div class="category-tab">用车</div>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item"><span class="q-icon">?</span>如何换挡？</div>
+          <div class="faq-item"><span class="q-icon">?</span>如何实名认证？</div>
+          <div class="faq-item"><span class="q-icon">?</span>为什么要实名认证？</div>
+          <div class="faq-item"><span class="q-icon">?</span>如何调节后视镜？</div>
+        </div>
+      </div>
+      <div class="chat-input-area">
+        <textarea class="chat-input" placeholder="输入您的问题，例如：如何调节方向盘高度？" rows="1"></textarea>
+        <button class="send-btn">→</button>
+      </div>
+    </div>
+
+    <!-- Privacy overlay -->
+    <div class="privacy-overlay" id="privacy2">
+      <div class="privacy-modal">
+        <div class="title">隐私协议</div>
+        <div class="content">
+          感谢您使用卡车助手。我们重视您的隐私和数据安全。<br><br>
+          1. 数据采集：当您使用AI问答功能时，我们会采集您的对话内容、FAQ点击数据，用于优化答案质量。<br><br>
+          2. 数据安全：您的个人信息和车辆数据将受到严格保护，不会泄露给第三方。
+        </div>
+        <div class="btns">
+          <button class="btn btn-disagree" onclick="closePrivacy('privacy2')">不同意</button>
+          <button class="btn btn-agree" onclick="agreePrivacy('privacy2','chat2')">同意</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast2">已复制</div>
+  </div>
+</div>
+
+<script>
+var firstTime = true;
+
+function openChat(btn) {
+  var phone = btn.parentElement;
+  var chatId = phone.querySelector('.chat-overlay').id;
+  if (firstTime) {
+    phone.querySelector('.privacy-overlay').classList.add('show');
+    firstTime = false;
+  } else {
+    phone.querySelector('.chat-overlay').classList.add('show');
+  }
+}
+
+function closeChat(e, id) {
+  e.stopPropagation();
+  document.getElementById(id).classList.remove('show');
+}
+
+function agreePrivacy(privacyId, chatId) {
+  document.getElementById(privacyId).classList.remove('show');
+  document.getElementById(chatId).classList.add('show');
+}
+
+function closePrivacy(privacyId) {
+  document.getElementById(privacyId).classList.remove('show');
+}
+</script>
+</body>
+</html>

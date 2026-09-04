@@ -3,22 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Chat Box - 原型 MVP1</title>
+<title>卡车助手 - 完整交互原型 v5</title>
 <style>
 :root { --gold: hsla(31, 84%, 83%, 1); --gold-dark: hsla(31, 70%, 60%, 1); --bg: #1a1a1a; --bg-card: #242424; --bg-input: #2a2a2a; --text: #e0d6c8; --text-secondary: #9a8e7e; --border: #3a3530; --danger: #c0392b; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif; background: #0d0d0d; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 20px; gap: 0; }
-.password-gate { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-.password-gate .gate-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 40px; text-align: center; max-width: 340px; }
-.password-gate .gate-box .gate-icon { font-size: 48px; margin-bottom: 16px; }
-.password-gate .gate-box .gate-title { font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
-.password-gate .gate-box .gate-desc { font-size: 13px; color: var(--text-secondary); margin-bottom: 24px; }
-.password-gate .gate-box .gate-input { width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-input); color: var(--text); font-size: 14px; text-align: center; outline: none; margin-bottom: 16px; }
-.password-gate .gate-box .gate-input:focus { border-color: var(--gold); }
-.password-gate .gate-box .gate-btn { width: 100%; padding: 12px; border-radius: 12px; background: var(--gold); color: #1a1a1a; border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-.password-gate .gate-box .gate-btn:hover { background: var(--gold-dark); }
-.password-gate .gate-box .gate-error { font-size: 12px; color: var(--danger); margin-top: 8px; display: none; }
-.password-gate .gate-box .gate-error.show { display: block; }
 .layout-left { width: 200px; flex-shrink: 0; display: flex; flex-direction: column; gap: 8px; position: sticky; top: 20px; max-height: 90vh; overflow-y: auto; }
 .side-nav { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 8px; display: flex; flex-direction: column; gap: 2px; }
 .side-nav-item { padding: 10px 14px; font-size: 13px; color: var(--text-secondary); cursor: pointer; border-radius: 8px; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
@@ -77,13 +66,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC"
 .voice-inline .v-btn.stop { background: var(--danger); color: #fff; }
 .msg-system { text-align: center; margin: 10px 0; font-size: 12px; color: var(--text-secondary); padding: 4px 0; }
 .user-msg { display: flex; justify-content: flex-end; margin: 4px 0; }
-.user-msg .bubble { background: var(--gold); color: #1a1a1a; padding: 10px 14px; border-radius: 18px 18px 4px 18px; max-width: 78%; font-size: 14px; line-height: 1.5; }
+.user-msg .bubble { background: var(--gold); color: #1a1a1a; padding: 10px 14px; border-radius: 18px 18px 4px 18px; max-width: 78%; font-size: 14px; line-height: 1.5; cursor: pointer; }
 .user-msg .bubble.sending { opacity: 0.6; }
 .user-msg .bubble.failed { background: #3a3530; color: var(--text-secondary); }
 .streaming-cursor { display: inline-block; width: 2px; height: 14px; background: var(--gold); animation: blink 0.8s infinite; vertical-align: middle; margin-left: 2px; }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-.msg-actions { display: flex; gap: 12px; padding: 8px 0 4px 40px; flex-wrap: wrap; }
-.msg-action { font-size: 12px; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; gap: 4px; background: none; border: none; transition: all 0.2s; padding: 4px 0; }
+.msg-actions { display: flex; gap: 16px; padding: 6px 0 6px 36px; flex-wrap: wrap; }
+.msg-action { font-size: 12px; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; gap: 4px; background: none; border: none; transition: all 0.2s; }
 .msg-action:hover { color: var(--gold); }
 .msg-action.active { color: var(--gold); font-weight: 600; }
 .welcome-area { text-align: center; padding: 30px 0 16px; }
@@ -93,8 +82,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC"
 .welcome-cards::-webkit-scrollbar { display: none; }
 .welcome-card { flex-shrink: 0; background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 12px 16px; font-size: 13px; color: var(--text); cursor: pointer; white-space: nowrap; transition: all 0.2s; }
 .welcome-card:hover { border-color: var(--gold); background: #2a2820; }
-.keyword-row { display: flex; gap: 6px; padding: 6px 16px; overflow-x: auto; scrollbar-width: none; flex-shrink: 0; background: var(--bg); }
-.keyword-row::-webkit-scrollbar { display: none; }
+.keyword-row { display: flex; gap: 6px; padding: 6px 0; overflow-x: auto; scrollbar-width: none; }
 .keyword-tag { flex-shrink: 0; padding: 6px 14px; border-radius: 16px; background: rgba(31, 100%, 83%, 0.08); color: var(--gold); font-size: 12px; cursor: pointer; border: 1px solid rgba(31, 100%, 83%, 0.2); white-space: nowrap; transition: all 0.2s; }
 .keyword-tag:hover { background: rgba(31, 100%, 83%, 0.15); }
 .faq-module { border: 1px solid var(--border); border-radius: 14px; background: var(--bg-card); overflow: hidden; margin-top: 8px; }
@@ -128,6 +116,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC"
 .escalation .esc-phone { display: flex; align-items: center; gap: 8px; padding: 10px 16px; background: var(--gold); color: #1a1a1a; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; width: fit-content; }
 .error-msg { text-align: center; font-size: 13px; color: var(--text-secondary); padding: 14px; }
 .error-msg .retry { color: var(--gold); cursor: pointer; font-weight: 500; }
+.quote-bar { background: var(--bg-input); border-radius: 10px; padding: 8px 12px; margin: 0 0 2px; font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; justify-content: space-between; border-left: 3px solid var(--gold); }
+.quote-bar .close { font-size: 16px; color: var(--text-secondary); cursor: pointer; background: none; border: none; }
+.ctx-menu { position: absolute; background: var(--bg-card); border-radius: 12px; box-shadow: 0 6px 24px rgba(0,0,0,0.4); padding: 4px 0; z-index: 100; min-width: 120px; border: 1px solid var(--border); }
+.ctx-menu .item { padding: 12px 16px; font-size: 14px; color: var(--text); cursor: pointer; transition: background 0.15s; }
+.ctx-menu .item:hover { background: var(--bg-input); }
+.ctx-menu .item.danger { color: var(--danger); }
 .vehicle-picker { position: absolute; top: 50px; left: 12px; right: 12px; background: var(--bg-card); border-radius: 14px; box-shadow: 0 6px 24px rgba(0,0,0,0.4); z-index: 100; padding: 8px; border: 1px solid var(--border); }
 .vehicle-picker .item { padding: 12px 16px; font-size: 13px; color: var(--text); cursor: pointer; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; transition: background 0.15s; }
 .vehicle-picker .item:hover { background: var(--bg-input); }
@@ -144,21 +138,34 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC"
 .btn-secondary:hover { background: #3a3530; }
 .btn-danger { background: var(--danger); color: #fff; }
 .btn-danger:hover { background: #a93226; }
-.source-ref { border: 1px solid var(--border); border-radius: 10px; background: var(--bg-input); padding: 10px 12px; margin-top: 8px; }
-.source-ref .source-title { font-size: 11px; color: var(--text-secondary); margin-bottom: 6px; }
-.source-ref .source-item { display: flex; align-items: center; gap: 6px; padding: 4px 0; font-size: 12px; color: var(--text); }
-.source-ref .source-item .source-idx { width: 18px; height: 18px; border-radius: 50%; background: rgba(31, 100%, 83%, 0.15); color: var(--gold); font-size: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.source-ref .source-item .source-link { color: var(--gold); cursor: pointer; margin-left: auto; font-size: 11px; }
-.quick-follow { margin-top: 8px; }
-.quick-follow .qf-title { font-size: 11px; color: var(--text-secondary); margin-bottom: 6px; }
-.quick-follow .qf-item { padding: 8px 12px; background: rgba(31, 100%, 83%, 0.06); border: 1px solid rgba(31, 100%, 83%, 0.15); border-radius: 8px; font-size: 12px; color: var(--gold); cursor: pointer; margin-bottom: 4px; transition: all 0.2s; }
-.quick-follow .qf-item:hover { background: rgba(31, 100%, 83%, 0.12); }
-.dial-confirm { text-align: left; }
-.dial-confirm .phone-num { font-size: 20px; color: var(--text); font-weight: 700; margin: 8px 0; text-align: center; }
 .toast { position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: var(--gold); padding: 10px 24px; border-radius: 24px; font-size: 13px; z-index: 300; pointer-events: none; animation: toastIn 0.3s ease; }
 @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(10px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
 .network-toast { position: absolute; top: 60px; left: 50%; transform: translateX(-50%); background: rgba(180, 80, 30, 0.2); color: var(--gold); padding: 10px 20px; border-radius: 8px; font-size: 13px; z-index: 150; border: 1px solid rgba(31, 100%, 83%, 0.2); white-space: nowrap; }
+.guide-box { background: var(--bg-card); border-radius: 16px; padding: 24px; text-align: center; max-width: 280px; border: 1px solid var(--border); }
+.guide-box .robot { font-size: 40px; margin-bottom: 12px; }
+.guide-box .guide-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+.guide-box .tip { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px; }
 .privacy-modal .content { font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin: 12px 0; max-height: 150px; overflow-y: auto; text-align: left; }
+.search-bar { padding: 10px 16px; background: var(--bg); }
+.search-input { width: 100%; padding: 8px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg-input); font-size: 13px; color: var(--text); outline: none; }
+.search-input::placeholder { color: var(--text-secondary); }
+.search-input:focus { border-color: var(--gold); }
+.history-list { flex: 1; overflow-y: auto; }
+.history-item { display: flex; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--border); cursor: pointer; position: relative; background: var(--bg-card); transition: background 0.15s; }
+.history-item:hover { background: #2a2820; }
+.history-item .content { flex: 1; }
+.history-item .question { font-size: 14px; color: var(--text); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.history-item .time { font-size: 12px; color: var(--text-secondary); }
+.history-item .arrow { color: var(--text-secondary); font-size: 14px; }
+.history-item .delete-swipe { position: absolute; right: 0; top: 0; bottom: 0; background: var(--danger); color: #fff; display: flex; align-items: center; padding: 0 20px; font-size: 13px; cursor: pointer; opacity: 0; transition: opacity 0.2s; }
+.history-item:hover .delete-swipe { opacity: 1; }
+.empty-state { text-align: center; padding: 60px 20px; }
+.empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+.empty-state .text { font-size: 14px; color: var(--text-secondary); }
+.pull-loading { text-align: center; padding: 16px; font-size: 12px; color: var(--text-secondary); cursor: pointer; }
+.pull-loading:hover { color: var(--gold); }
+.pull-loading .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 6px; vertical-align: middle; }
+@keyframes spin { to { transform: rotate(360deg); } }
 .my-page { padding: 0; flex: 1; overflow-y: auto; }
 .my-welcome { padding: 24px 20px 12px; }
 .my-greeting { font-size: 26px; font-weight: 700; color: var(--text); }
@@ -187,36 +194,24 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC"
 .bottom-tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; color: var(--text-secondary); cursor: pointer; }
 .bottom-tab span { font-size: 18px; }
 .bottom-tab.active { color: var(--gold); }
-.fab { position: absolute; bottom: 120px; right: 24px; width: 56px; height: 56px; background: var(--gold); border-radius: 50%; box-shadow: 0 4px 16px rgba(200, 150, 80, 0.3); display: flex; align-items: center; justify-content: center; cursor: grab; z-index: 10; font-size: 26px; touch-action: none; user-select: none; }
+.fab { position: absolute; bottom: 120px; right: 24px; width: 56px; height: 56px; background: var(--gold); border-radius: 50%; box-shadow: 0 4px 16px rgba(200, 150, 80, 0.3); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; font-size: 26px; transition: all 0.2s; }
 .fab:hover { transform: scale(1.05); }
-.fab.dragging { cursor: grabbing; transition: none; opacity: 0.85; }
-.fab.snapping { transition: left 0.3s ease, right 0.3s ease; }
 .vehicle-select { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text); font-weight: 500; cursor: pointer; background: none; border: none; }
 .vehicle-select .arrow { font-size: 10px; color: var(--text-secondary); }
 .no-vehicle-banner { background: rgba(31, 100%, 83%, 0.06); border: 1px solid rgba(31, 100%, 83%, 0.15); border-radius: 12px; padding: 12px 16px; margin: 8px 0; display: flex; align-items: center; gap: 10px; }
 .no-vehicle-banner .nv-text { font-size: 13px; color: var(--text-secondary); flex: 1; }
 .no-vehicle-banner .nv-link { font-size: 13px; color: var(--gold); cursor: pointer; white-space: nowrap; }
-.pull-loading { text-align: center; padding: 16px; font-size: 12px; color: var(--text-secondary); cursor: pointer; }
-.pull-loading:hover { color: var(--gold); }
-.pull-loading .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 6px; vertical-align: middle; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.privacy-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.75); z-index: 300; display: flex; align-items: center; justify-content: center; }
+.history-panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 12px; min-width: 180px; display: flex; flex-direction: column; gap: 4px; }
+.history-panel-title { font-size: 12px; color: var(--text-secondary); padding: 4px 8px; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
+.history-panel-item { padding: 10px 12px; font-size: 13px; color: var(--text); cursor: pointer; border-radius: 8px; transition: all 0.2s; }
+.history-panel-item:hover { background: var(--bg-input); color: var(--gold); }
+.history-panel-item .tag { font-size: 10px; padding: 2px 6px; border-radius: 8px; margin-left: 6px; }
+.history-panel-item .tag.done { background: rgba(39, 174, 96, 0.15); color: #27ae60; }
 @media (max-width: 600px) { body { flex-direction: column; align-items: center; } .layout-left { width: 100%; position: static; } .phone-wrap { margin-left: 0; } }
 </style>
 </head>
 <body>
-<div class="password-gate" id="passGate">
-  <div class="gate-box">
-    <div class="gate-icon">🔒</div>
-    <div class="gate-title">AI Chat Box 原型</div>
-    <div class="gate-desc">请输入访问密码</div>
-    <input type="password" class="gate-input" id="passInput" placeholder="输入密码" onkeydown="if(event.key==='Enter')checkPass()">
-    <button class="gate-btn" onclick="checkPass()">进入</button>
-    <div class="gate-error" id="passError">密码错误</div>
-  </div>
-</div>
 
-<div id="mainApp" style="display:none">
 <div class="layout-left">
   <nav class="side-nav" id="sideNav">
     <div class="side-nav-item active" data-screen="home">🏠 首页入口</div>
@@ -226,6 +221,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC"
     <div class="side-nav-item" data-screen="chat-qa-streaming">⏳ 流式回复</div>
     <div class="side-nav-item" onclick="toggleSubNav('subBoundary')">🔍 边界场景 <span class="expand-icon">▶</span></div>
     <div class="side-nav-item" data-screen="chat-error">⚠️ 异常状态</div>
+    <div class="side-nav-item" data-screen="history">📋 历史会话</div>
+    <div class="side-nav-item" data-screen="interactions">✏️ 消息操作</div>
     <div class="side-nav-item" data-screen="modals">🪟 弹窗引导</div>
     <div class="side-nav-divider"></div>
     <div class="side-nav-item" id="offlineToggleLabel" onclick="toggleOffline()" style="color:var(--danger)">🔴 模拟离线</div>
@@ -241,6 +238,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC"
     <div class="sub-nav-item" onclick="navTo('chat-boundary');sendBoundary('这车多少钱有什么优惠')">💰 超出边界</div>
     <div class="sub-nav-item" onclick="navTo('chat-boundary');sendBoundary('方向盘怎么调')">🔄 重复问题</div>
     <div class="sub-nav-item" onclick="navTo('chat-boundary');sendBoundary('帮我查看天气')">📋 普通拒识</div>
+  </div>
+  <div class="history-panel" id="historyPanel" style="display:none">
+    <div class="history-panel-title">📂 历史会话场景</div>
+    <div class="history-panel-item" onclick="resetHistory()">📋 正常列表 <span class="tag done">✓</span></div>
+    <div class="history-panel-item" onclick="document.getElementById('searchInput').value='方向盘';resetHistory();filterHistory()">🔍 搜索有结果</div>
+    <div class="history-panel-item" onclick="document.getElementById('searchInput').value='xyz';resetHistory();filterHistory()">🔍 搜索无结果</div>
+    <div class="history-panel-item" onclick="resetHistory();document.getElementById('historyList').innerHTML='';document.getElementById('historyEmpty').style.display='block'">📭 空态</div>
   </div>
 </div>
 
@@ -262,50 +266,43 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC"
         </div>
       </div>
       <div class="bottom-tab-bar"><div class="bottom-tab"><span>🚛</span>车辆</div><div class="bottom-tab"><span>🔧</span>服务</div><div class="bottom-tab active"><span>👤</span>我的</div></div>
-      <div class="fab" id="assistantFab" onmousedown="startDrag(event)" ontouchstart="startDrag(event)">🤖</div>
+      <div class="fab" onclick="navTo('chat-empty')">🤖</div>
     </div>
 
     <!-- CHAT EMPTY -->
     <div class="screen" id="screen-chat-empty">
-      <div class="header"><button class="back" onclick="navTo('home')">←</button><span class="center">AI Chat Box</span><button class="vehicle-select" onclick="toggleEl('vpEmpty')">沪A·12345 E27 <span class="arrow">▼</span></button><div class="header-right-group"><button class="right" onclick="newChat()">新对话</button><button class="auto-voice-btn" onclick="toggleAutoVoice()" title="自动语音播报">🔇</button></div></div>
+      <div class="header"><button class="back" onclick="navTo('home')">←</button><button class="vehicle-select" onclick="toggleEl('vpEmpty')">沪A·12345 E27 <span class="arrow">▼</span></button><div class="header-right-group"><button class="right" onclick="newChat()">新对话</button><button class="auto-voice-btn" onclick="toggleAutoVoice()" title="自动语音播报">🔇</button></div></div>
       <div class="offline-banner" id="offlineEmpty">当前为离线状态，请检查你的网络</div>
-      <div class="chat-body" id="emptyChatBody">
+      <div class="chat-body">
         <div class="welcome-area"><div class="robot-icon">🤖</div><div class="welcome-text">你好，我是卡车助手，有什么可以帮你的？</div></div>
+        <div class="welcome-cards"><div class="welcome-card" onclick="sendFromCard('如何调节方向盘高度？')">如何调节方向盘高度？</div><div class="welcome-card" onclick="sendFromCard('仪表盘报警灯亮了怎么办？')">仪表盘报警灯亮了怎么办？</div><div class="welcome-card" onclick="sendFromCard('车辆充电注意事项有哪些？')">车辆充电注意事项有哪些？</div><div class="welcome-card" onclick="sendFromCard('如何查看车辆续航里程？')">如何查看车辆续航里程？</div></div>
+        <div class="keyword-row"><div class="keyword-tag" onclick="sendFromCard('体验数字钥匙')">体验数字钥匙</div><div class="keyword-tag" onclick="sendFromCard('新车交付指南')">新车交付指南</div></div>
         <div class="faq-module"><div class="faq-module-header">📂 常用问题</div><div class="faq-session-tabs" id="faqTabs"><div class="faq-session-tab active" data-panel="faqPanel1">车书</div><div class="faq-session-tab" data-panel="faqPanel2">保养</div><div class="faq-session-tab" data-panel="faqPanel3">用车</div></div><div class="faq-panel active" id="faqPanel1"><div class="faq-item" onclick="sendFromCard('如何换挡？')"><span class="icon">?</span>如何换挡？</div><div class="faq-item" onclick="sendFromCard('如何实名认证？')"><span class="icon">?</span>如何实名认证？</div><div class="faq-item" onclick="sendFromCard('为什么要实名认证？')"><span class="icon">?</span>为什么要实名认证？</div><div class="faq-item" onclick="sendFromCard('如何调节后视镜？')"><span class="icon">?</span>如何调节后视镜？</div></div><div class="faq-panel" id="faqPanel2"><div class="faq-item" onclick="sendFromCard('首保什么时候做？')"><span class="icon">?</span>首保什么时候做？</div><div class="faq-item" onclick="sendFromCard('保养周期是多久？')"><span class="icon">?</span>保养周期是多久？</div><div class="faq-item" onclick="sendFromCard('机油需要换什么型号？')"><span class="icon">?</span>机油需要换什么型号？</div></div><div class="faq-panel" id="faqPanel3"><div class="faq-item" onclick="sendFromCard('如何查看续航里程？')"><span class="icon">?</span>如何查看续航里程？</div><div class="faq-item" onclick="sendFromCard('充电时能开空调吗？')"><span class="icon">?</span>充电时能开空调吗？</div><div class="faq-item" onclick="sendFromCard('冬季续航会减少多少？')"><span class="icon">?</span>冬季续航会减少多少？</div></div></div>
       </div>
-      <div class="keyword-row"><div class="keyword-tag" onclick="sendFromCard('体验数字钥匙')">体验数字钥匙</div><div class="keyword-tag" onclick="sendFromCard('新车交付指南')">新车交付指南</div></div>
       <div class="chat-input-area"><textarea class="chat-input" id="inputEmpty" placeholder="输入您的问题，例如：如何调节方向盘高度？" rows="1" oninput="updateSendBtn('inputEmpty','sendBtnEmpty')"></textarea><button class="send-btn" id="sendBtnEmpty" disabled onclick="sendFromCard(document.getElementById('inputEmpty').value)">→</button></div>
       <div class="vehicle-picker" id="vpEmpty" style="display:none"><div class="item" onclick="selectVehicle('沪A·12345','E27','vpEmpty')">沪A·12345 · NEXT ERA E27 <span class="check">✓</span></div><div class="item" onclick="selectVehicle('沪B·67890','G Series ICE','vpEmpty')">沪B·67890 · G Series ICE</div><div class="item" onclick="selectVehicle('沪C·11111','E29','vpEmpty')">沪C·11111 · NEXT ERA E29</div></div>
-      <div class="privacy-overlay" id="privacyFirstOverlay" style="display:none">
-        <div class="modal privacy-modal" style="margin:40px;max-width:320px">
-          <div class="title">隐私协议</div>
-          <div class="content">感谢您使用卡车助手。我们重视您的隐私和数据安全。<br><br>1. 数据采集：当您使用AI问答功能时，我们会采集您的对话内容、FAQ点击数据，用于优化答案质量。<br><br>2. 数据使用：采集的数据仅用于提升服务质量，不会用于其他商业用途。<br><br>3. 数据安全：您的个人信息和车辆数据将受到严格保护，不会泄露给第三方。<br><br>4. 车辆信息：您的VIN码仅用于匹配知识库，不会在APP端持久化存储。</div>
-          <div class="btns"><button class="btn btn-secondary" onclick="rejectPrivacy()">不同意</button><button class="btn btn-primary" onclick="acceptPrivacy()">同意并继续</button></div>
-        </div>
-      </div>
     </div>
 
     <!-- CHAT EMPTY - NO VEHICLE -->
     <div class="screen" id="screen-chat-empty-novehicle">
-      <div class="header"><button class="back" onclick="navTo('home')">←</button><span class="center">AI Chat Box</span><span style="font-size:13px;color:var(--text-secondary)">未选择车辆</span><div class="header-right-group"><button class="right" onclick="newChat()">新对话</button><button class="auto-voice-btn" onclick="toggleAutoVoice()" title="自动语音播报">🔇</button></div></div>
+      <div class="header"><button class="back" onclick="navTo('home')">←</button><span class="center" style="font-size:13px;color:var(--text-secondary)">未选择车辆</span><div class="header-right-group"><button class="right" onclick="newChat()">新对话</button><button class="auto-voice-btn" onclick="toggleAutoVoice()" title="自动语音播报">🔇</button></div></div>
       <div class="offline-banner" id="offlineNV">当前为离线状态，请检查你的网络</div>
-      <div class="chat-body"><div class="welcome-area"><div class="robot-icon">🤖</div><div class="welcome-text">你好，我是卡车助手，有什么可以帮你的？</div></div><div class="no-vehicle-banner"><span style="font-size:20px">🚛</span><span class="nv-text">绑定车辆后，我可以为您提供更精准的回答</span><span class="nv-link" onclick="toast('跳转到车辆管理')">去绑定 ›</span></div><div class="faq-module"><div class="faq-module-header">📂 常用问题</div><div class="faq-session-tabs"><div class="faq-session-tab active" data-panel="nvPanel1">车型介绍</div><div class="faq-session-tab" data-panel="nvPanel2">购车指南</div></div><div class="faq-panel active" id="nvPanel1"><div class="faq-item" onclick="sendFromCard('NEXT ERA E27 有什么配置？')"><span class="icon">?</span>NEXT ERA E27 有什么配置？</div><div class="faq-item" onclick="sendFromCard('Scania 卡车有哪些优势？')"><span class="icon">?</span>Scania 卡车有哪些优势？</div><div class="faq-item" onclick="sendFromCard('电动卡车和燃油卡车怎么选？')"><span class="icon">?</span>电动卡车和燃油卡车怎么选？</div></div><div class="faq-panel" id="nvPanel2"><div class="faq-item" onclick="sendFromCard('如何预约试驾？')"><span class="icon">?</span>如何预约试驾？</div><div class="faq-item" onclick="sendFromCard('购车流程是怎样的？')"><span class="icon">?</span>购车流程是怎样的？</div><div class="faq-item" onclick="sendFromCard('有没有金融方案？')"><span class="icon">?</span>有没有金融方案？</div></div></div></div>
-      <div class="keyword-row"><div class="keyword-tag" onclick="sendFromCard('体验数字钥匙')">体验数字钥匙</div><div class="keyword-tag" onclick="sendFromCard('NEXT ERA 新品介绍')">NEXT ERA 新品介绍</div></div>
+      <div class="chat-body"><div class="welcome-area"><div class="robot-icon">🤖</div><div class="welcome-text">你好，我是卡车助手，有什么可以帮你的？</div></div><div class="no-vehicle-banner"><span style="font-size:20px">🚛</span><span class="nv-text">绑定车辆后，我可以为您提供更精准的回答</span><span class="nv-link" onclick="toast('跳转到车辆管理')">去绑定 ›</span></div><div class="welcome-cards"><div class="welcome-card" onclick="sendFromCard('NEXT ERA E27 续航多少？')">NEXT ERA E27 续航多少？</div><div class="welcome-card" onclick="sendFromCard('Scania 有哪些车型？')">Scania 有哪些车型？</div><div class="welcome-card" onclick="sendFromCard('如何预约试驾？')">如何预约试驾？</div></div><div class="keyword-row"><div class="keyword-tag" onclick="sendFromCard('体验数字钥匙')">体验数字钥匙</div><div class="keyword-tag" onclick="sendFromCard('NEXT ERA 新品介绍')">NEXT ERA 新品介绍</div></div><div class="faq-module"><div class="faq-module-header">📂 常用问题</div><div class="faq-session-tabs"><div class="faq-session-tab active" data-panel="nvPanel1">车型介绍</div><div class="faq-session-tab" data-panel="nvPanel2">购车指南</div></div><div class="faq-panel active" id="nvPanel1"><div class="faq-item" onclick="sendFromCard('NEXT ERA E27 有什么配置？')"><span class="icon">?</span>NEXT ERA E27 有什么配置？</div><div class="faq-item" onclick="sendFromCard('Scania 卡车有哪些优势？')"><span class="icon">?</span>Scania 卡车有哪些优势？</div><div class="faq-item" onclick="sendFromCard('电动卡车和燃油卡车怎么选？')"><span class="icon">?</span>电动卡车和燃油卡车怎么选？</div></div><div class="faq-panel" id="nvPanel2"><div class="faq-item" onclick="sendFromCard('如何预约试驾？')"><span class="icon">?</span>如何预约试驾？</div><div class="faq-item" onclick="sendFromCard('购车流程是怎样的？')"><span class="icon">?</span>购车流程是怎样的？</div><div class="faq-item" onclick="sendFromCard('有没有金融方案？')"><span class="icon">?</span>有没有金融方案？</div></div></div></div>
       <div class="chat-input-area"><textarea class="chat-input" id="inputNV" placeholder="输入您的问题..." rows="1" oninput="updateSendBtn('inputNV','sendBtnNV')"></textarea><button class="send-btn" id="sendBtnNV" disabled onclick="sendFromCard(document.getElementById('inputNV').value)">→</button></div>
     </div>
 
     <!-- Q&A COMPLETE -->
     <div class="screen" id="screen-chat-qa">
-      <div class="header"><button class="back" onclick="navTo('home')">←</button><span class="center">AI Chat Box</span><button class="vehicle-select" onclick="toggleEl('vpQA')">沪A·12345 E27 <span class="arrow">▼</span></button><div class="header-right-group"><button class="right" onclick="navTo('chat-empty')">新对话</button><button class="auto-voice-btn" onclick="toggleAutoVoice()" title="自动语音播报">🔇</button></div></div>
+      <div class="header"><button class="back" onclick="navTo('home')">←</button><button class="vehicle-select" onclick="toggleEl('vpQA')">沪A·12345 E27 <span class="arrow">▼</span></button><div class="header-right-group"><button class="right" onclick="navTo('chat-empty')">新对话</button><button class="auto-voice-btn" onclick="toggleAutoVoice()" title="自动语音播报">🔇</button></div></div>
       <div class="offline-banner" id="offlineQA">当前为离线状态，请检查你的网络</div>
-      <div class="chat-body" id="qaCompleteBody"><div class="msg-system">── 已切换到「沪A·12345 E27」──</div><div class="user-msg"><div class="bubble">方向盘怎么调？</div></div><div class="ai-row"><div class="ai-avatar">🤖</div><div class="ai-col"><div class="ai-name">卡车助手</div><div class="ai-bubble">方向盘调节步骤如下：<br><br>1. 找到方向盘下方的调节杆<br>2. 向下推动调节杆解锁<br>3. 调整方向盘到合适的高度和角度<br>4. 向上拉回调节杆锁定位置<br><br><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='140'%3E%3Crect width='300' height='140' fill='%232a2a2a' rx='10'/%3E%3Ctext x='150' y='65' text-anchor='middle' fill='%239a8e7e' font-size='13'%3E🖼️ 方向盘调节示意图%3C/text%3E%3Ctext x='150' y='90' text-anchor='middle' fill='%236a6a6a' font-size='11'%3E（调节杆位置 / 解锁方向）%3C/text%3E%3C/svg%3E" class="ai-img" alt="示意图"><span class="ai-link" onclick="toggleArt('artComplete')">📖 查看完整操作图示（车书第3.2.1章节）</span><div class="art-expand" id="artComplete"><div class="art-title">📖 方向盘调节 · 车书第3.2.1章节</div><div class="art-content"><strong>安全提示：</strong>请勿在行驶中调节方向盘。<br><br><strong>操作步骤：</strong><br>1. 将座椅调整至舒适位置<br>2. 找到方向盘下方的调节杆<br>3. 向下推动调节杆至解锁位置<br>4. 调整至合适高度和角度<br>5. 确保能清晰看到仪表盘所有指示灯<br>6. 向上拉回调节杆，听到"咔哒"声表示已锁定<br>7. 尝试上下晃动方向盘确认已锁紧</div><span class="art-close" onclick="toggleArt('artComplete');event.stopPropagation()">收起 ▲</span></div><div class="source-ref"><div class="source-title">📖 参考来源</div><div class="source-item"><span class="source-idx">1</span>NEXT ERA 用户手册 · 第3.2.1章节 方向盘调节<span class="source-link" onclick="toast('跳转到车书第3.2.1章节')">查看原文 ›</span></div><div class="source-item"><span class="source-idx">2</span>NEXT ERA 用户手册 · 第3.2 驾驶舱操作<span class="source-link" onclick="toast('跳转到车书第3.2章节')">查看原文 ›</span></div></div><div class="disclaimer">内容由AI生成，仅供参考</div></div></div></div><div class="quick-follow"><div class="qf-title">💡 你可能还想问</div><div class="qf-item" onclick="sendFromCard('如何调节后视镜？')">如何调节后视镜？</div><div class="qf-item" onclick="sendFromCard('座椅怎么调节？')">座椅怎么调节？</div></div></div>
+      <div class="chat-body" id="qaCompleteBody"><div class="msg-system">── 已切换到「沪A·12345 E27」──</div><div class="user-msg" id="qacU1"><div class="bubble" onclick="showCtxMenu(event,'qacU1')">方向盘怎么调？</div></div><div class="ai-row"><div class="ai-avatar">🤖</div><div class="ai-col"><div class="ai-name">卡车助手</div><div class="ai-bubble">方向盘调节步骤如下：<br><br>1. 找到方向盘下方的调节杆<br>2. 向下推动调节杆解锁<br>3. 调整方向盘到合适的高度和角度<br>4. 向上拉回调节杆锁定位置<br><br><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='140'%3E%3Crect width='300' height='140' fill='%232a2a2a' rx='10'/%3E%3Ctext x='150' y='65' text-anchor='middle' fill='%239a8e7e' font-size='13'%3E🖼️ 方向盘调节示意图%3C/text%3E%3Ctext x='150' y='90' text-anchor='middle' fill='%236a6a6a' font-size='11'%3E（调节杆位置 / 解锁方向）%3C/text%3E%3C/svg%3E" class="ai-img" alt="示意图"><span class="ai-link" onclick="toggleArt('artComplete')">📖 查看完整操作图示（车书第3.2.1章节）</span><div class="art-expand" id="artComplete"><div class="art-title">📖 方向盘调节 · 车书第3.2.1章节</div><div class="art-content"><strong>安全提示：</strong>请勿在行驶中调节方向盘。<br><br><strong>操作步骤：</strong><br>1. 将座椅调整至舒适位置<br>2. 找到方向盘下方的调节杆<br>3. 向下推动调节杆至解锁位置<br>4. 调整至合适高度和角度<br>5. 确保能清晰看到仪表盘所有指示灯<br>6. 向上拉回调节杆，听到"咔哒"声表示已锁定<br>7. 尝试上下晃动方向盘确认已锁紧</div><span class="art-close" onclick="toggleArt('artComplete');event.stopPropagation()">收起 ▲</span></div><div class="disclaimer">内容由AI生成，仅供参考</div></div></div></div><div class="msg-actions"><button class="msg-action" onclick="toggleFB(this)">👍</button><button class="msg-action" onclick="toggleFB(this)">👎</button><button class="msg-action" onclick="copyText('方向盘调节步骤...')">📋 复制</button><button class="msg-action" id="voiceBtnQ1" onclick="toggleVoiceInline('voiceInlineQ1','voiceBtnQ1')">🔊 播报</button></div><div class="ai-row" id="voiceInlineQ1" style="display:none"><div class="ai-avatar">🤖</div><div class="ai-col"><div class="ai-name">卡车助手</div><div class="ai-bubble">方向盘调节步骤如下：1. 找到方向盘下方的调节杆...<div class="voice-inline"><span class="v-status">🔊 正在播报...</span><button class="v-btn" id="vPauseQ1" onclick="pauseVoiceInline('vPauseQ1')">⏸</button><button class="v-btn stop" onclick="stopVoiceInline('voiceInlineQ1','voiceBtnQ1')">⏹</button></div></div></div></div></div>
       <div class="chat-input-area"><textarea class="chat-input" id="inputQA" placeholder="输入您的问题..." rows="1" oninput="updateSendBtn('inputQA','sendBtnQA')"></textarea><button class="send-btn" id="sendBtnQA" disabled onclick="sendFromUI('inputQA')">→</button></div>
       <div class="vehicle-picker" id="vpQA" style="display:none"><div class="item" onclick="switchVeh('沪A·12345','E27','vpQA')">沪A·12345 · NEXT ERA E27 <span class="check">✓</span></div><div class="item" onclick="switchVeh('沪B·67890','G Series ICE','vpQA')">沪B·67890 · G Series ICE</div><div class="item" onclick="switchVeh('沪C·11111','E29','vpQA')">沪C·11111 · NEXT ERA E29</div></div>
     </div>
 
     <!-- STREAMING Q&A -->
     <div class="screen" id="screen-chat-qa-streaming">
-      <div class="header"><button class="back" onclick="stopStream();navTo('home')">←</button><span class="center">AI Chat Box</span><button class="vehicle-select">沪A·12345 E27 <span class="arrow">▼</span></button><div class="header-right-group"><button class="right" onclick="stopStream();navTo('chat-empty')">新对话</button><button class="auto-voice-btn" onclick="toggleAutoVoice()" title="自动语音播报">🔇</button></div></div>
+      <div class="header"><button class="back" onclick="stopStream();navTo('home')">←</button><button class="vehicle-select">沪A·12345 E27 <span class="arrow">▼</span></button><div class="header-right-group"><button class="right" onclick="stopStream();navTo('chat-empty')">新对话</button><button class="auto-voice-btn" onclick="toggleAutoVoice()" title="自动语音播报">🔇</button></div></div>
       <div class="offline-banner" id="offlineStream">当前为离线状态，请检查你的网络</div>
       <div class="chat-body" id="streamBody"><div class="user-msg"><div class="bubble">方向盘怎么调？</div></div><div class="think-row" id="streamThink"><div class="ai-avatar">🤖</div><div class="ai-col"><div class="ai-name">卡车助手</div><div class="think-box"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div><span class="think-status" id="thinkStatus">正在查找车书...</span></div></div></div><div class="ai-row" id="streamAnswer" style="display:none"><div class="ai-avatar">🤖</div><div class="ai-col"><div class="ai-name">卡车助手</div><div class="ai-bubble" id="streamBubble"><span class="streaming-cursor" id="streamCursor"></span></div></div></div><div class="msg-actions" id="streamActions" style="display:none"><button class="msg-action" onclick="toggleFB(this)">👍</button><button class="msg-action" onclick="toggleFB(this)">👎</button><button class="msg-action" onclick="copyText('方向盘调节步骤...')">📋 复制</button><button class="msg-action" id="voiceBtnStream" onclick="toggleVoiceInline('voiceInlineStream','voiceBtnStream')">🔊 播报</button></div><div class="ai-row" id="voiceInlineStream" style="display:none"><div class="ai-avatar">🤖</div><div class="ai-col"><div class="ai-name">卡车助手</div><div class="ai-bubble"><span id="voiceStreamText">方向盘调节步骤如下：...</span><div class="voice-inline"><span class="v-status">🔊 正在播报...</span><button class="v-btn" id="vPauseStream" onclick="pauseVoiceInline('vPauseStream')">⏸</button><button class="v-btn stop" onclick="stopVoiceInline('voiceInlineStream','voiceBtnStream')">⏹</button></div></div></div></div></div>
       <div class="chat-input-area"><div class="stop-fab" id="streamStopFab" onclick="stopStreamingFull()">⏹ 停止生成</div><textarea class="chat-input" id="inputStream" placeholder="输入您的问题..." rows="1" oninput="updateSendBtn('inputStream','sendBtnStream')"></textarea><button class="send-btn" id="sendBtnStream" disabled onclick="sendFromUI('inputStream')">→</button></div>
@@ -313,7 +310,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC"
 
     <!-- BOUNDARY SCENARIOS -->
     <div class="screen" id="screen-chat-boundary">
-      <div class="header"><button class="back" onclick="navTo('home')">←</button><span class="center">AI Chat Box</span><span style="font-size:13px;color:var(--text-secondary)">未选择车辆</span><div class="header-right-group"><button class="right" onclick="resetReject();navTo('chat-empty')">新对话</button><button class="auto-voice-btn" onclick="toggleAutoVoice()" title="自动语音播报">🔇</button></div></div>
+      <div class="header"><button class="back" onclick="navTo('home')">←</button><span class="center" style="font-size:13px;color:var(--text-secondary)">未选择车辆</span><div class="header-right-group"><button class="right" onclick="resetReject();navTo('chat-empty')">新对话</button><button class="auto-voice-btn" onclick="toggleAutoVoice()" title="自动语音播报">🔇</button></div></div>
       <div class="offline-banner" id="offlineBoundary">当前为离线状态，请检查你的网络</div>
       <div class="chat-body"><div class="welcome-area"><div class="robot-icon">🤖</div><div class="welcome-text">你好，我是卡车助手，有什么可以帮你的？</div></div><div class="no-vehicle-banner"><span style="font-size:20px">🚛</span><span class="nv-text">绑定车辆后，我可以为您提供更精准的回答</span><span class="nv-link" onclick="toast('跳转到车辆管理')">去绑定 ›</span></div><div class="faq-module"><div class="faq-module-header">📂 常用问题</div><div class="faq-session-tabs"><div class="faq-session-tab active" data-panel="bdPanel1">车书</div><div class="faq-session-tab" data-panel="bdPanel2">保养</div><div class="faq-session-tab" data-panel="bdPanel3">用车</div></div><div class="faq-panel active" id="bdPanel1"><div class="faq-item" onclick="sendBoundaryMsgFromCard('如何换挡？')"><span class="icon">?</span>如何换挡？</div><div class="faq-item" onclick="sendBoundaryMsgFromCard('如何实名认证？')"><span class="icon">?</span>如何实名认证？</div><div class="faq-item" onclick="sendBoundaryMsgFromCard('为什么要实名认证？')"><span class="icon">?</span>为什么要实名认证？</div><div class="faq-item" onclick="sendBoundaryMsgFromCard('如何调节后视镜？')"><span class="icon">?</span>如何调节后视镜？</div></div><div class="faq-panel" id="bdPanel2"><div class="faq-item" onclick="sendBoundaryMsgFromCard('首保什么时候做？')"><span class="icon">?</span>首保什么时候做？</div><div class="faq-item" onclick="sendBoundaryMsgFromCard('保养周期是多久？')"><span class="icon">?</span>保养周期是多久？</div><div class="faq-item" onclick="sendBoundaryMsgFromCard('机油需要换什么型号？')"><span class="icon">?</span>机油需要换什么型号？</div></div><div class="faq-panel" id="bdPanel3"><div class="faq-item" onclick="sendBoundaryMsgFromCard('如何查看续航里程？')"><span class="icon">?</span>如何查看续航里程？</div><div class="faq-item" onclick="sendBoundaryMsgFromCard('充电时能开空调吗？')"><span class="icon">?</span>充电时能开空调吗？</div><div class="faq-item" onclick="sendBoundaryMsgFromCard('冬季续航会减少多少？')"><span class="icon">?</span>冬季续航会减少多少？</div></div></div></div>
       <div class="chat-input-area"><textarea class="chat-input" id="inputBoundary" placeholder="输入任意问题，系统自动匹配场景..." rows="1" oninput="updateSendBtn('inputBoundary','sendBtnBoundary')"></textarea><button class="send-btn" id="sendBtnBoundary" disabled onclick="sendBoundaryMsg()">→</button></div>
@@ -321,106 +318,60 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC"
 
     <!-- ERROR -->
     <div class="screen" id="screen-chat-error">
-      <div class="header"><button class="back" onclick="navTo('home')">←</button><span class="center">AI Chat Box</span><button class="vehicle-select">沪A·12345 E27 <span class="arrow">▼</span></button><div class="header-right-group"><button class="right" onclick="navTo('chat-empty')">新对话</button><button class="auto-voice-btn" onclick="toggleAutoVoice()" title="自动语音播报">🔇</button></div></div>
+      <div class="header"><button class="back" onclick="navTo('home')">←</button><button class="vehicle-select">沪A·12345 E27 <span class="arrow">▼</span></button><div class="header-right-group"><button class="right" onclick="navTo('chat-empty')">新对话</button><button class="auto-voice-btn" onclick="toggleAutoVoice()" title="自动语音播报">🔇</button></div></div>
       <div class="offline-banner" id="offlineError">当前为离线状态，请检查你的网络</div>
       <div class="chat-body"><div class="msg-system">── 发送中 ──</div><div class="user-msg"><div class="bubble sending">方向盘怎么调？</div></div><div class="msg-system">── 发送失败 ──</div><div class="user-msg"><div class="bubble failed">方向盘怎么调？</div></div><div class="error-msg">⚠️ 发送失败，<span class="retry" onclick="toast('已重新发送')">点击重试</span></div><div class="msg-system" style="margin-top:16px">── 请求超时 ──</div><div class="think-row"><div class="ai-avatar">🤖</div><div class="ai-col"><div class="ai-name">卡车助手</div><div class="think-box"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div><span class="think-status">正在查找车书...</span></div></div></div><div class="error-msg">⏱ 请求超时，请重试<br><span class="retry" onclick="toast('已重新发送')">点击重试</span></div><div class="msg-system" style="margin-top:16px">── 服务异常 ──</div><div class="error-msg">⚠️ 服务异常，请稍后重试<br><span class="retry" onclick="toast('已重新发送')">点击重试</span></div><div class="msg-system" style="margin-top:16px">── VIN 无效 ──</div><div class="error-msg">⚠️ VIN码无效，请检查车辆信息</div><div class="msg-system" style="margin-top:12px">── 车辆未识别 ──</div><div class="error-msg">⚠️ 未识别到车辆信息，请联系客服</div></div>
       <div class="chat-input-area"><textarea class="chat-input" id="inputError" placeholder="输入您的问题..." rows="1" oninput="updateSendBtn('inputError','sendBtnError')"></textarea><button class="send-btn" id="sendBtnError" disabled onclick="showNetToast()">→</button></div>
       <div class="network-toast" id="netToast" style="display:none">网络不可用，请稍后重试</div>
     </div>
 
+    <!-- HISTORY -->
+    <div class="screen" id="screen-history">
+      <div class="header"><button class="back" onclick="navTo('home')">←</button><span class="center">历史会话</span><div class="header-right-group"><button class="right danger" onclick="showEl('clearModal')">清空全部</button></div></div>
+      <div class="offline-banner" id="offlineHist">当前为离线状态，请检查你的网络</div>
+      <div class="search-bar"><input class="search-input" id="searchInput" placeholder="搜索历史会话..." oninput="filterHistory()"></div>
+      <div class="history-list" id="historyList"><div class="history-item" data-kw="方向盘 调节" onclick="openHistorySession('方向盘怎么调？')"><div class="content"><div class="question">方向盘怎么调？</div><div class="time">今天 14:30</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div></div><div class="history-item" data-kw="仪表盘 报警" onclick="openHistorySession('仪表盘报警灯亮了怎么办？')"><div class="content"><div class="question">仪表盘报警灯亮了怎么办？</div><div class="time">今天 13:15</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div></div><div class="history-item" data-kw="换挡" onclick="openHistorySession('如何换挡？')"><div class="content"><div class="question">如何换挡？</div><div class="time">今天 11:00</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div></div><div class="history-item" data-kw="实名认证" onclick="openHistorySession('如何实名认证？')"><div class="content"><div class="question">如何实名认证？</div><div class="time">今天 09:30</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div></div><div class="history-item" data-kw="充电" onclick="openHistorySession('车辆充电注意事项有哪些？')"><div class="content"><div class="question">车辆充电注意事项有哪些？</div><div class="time">昨天 17:00</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div></div><div class="history-item" data-kw="实名认证 原因" onclick="openHistorySession('为什么要实名认证？')"><div class="content"><div class="question">为什么要实名认证？</div><div class="time">昨天 15:00</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div></div><div class="history-item" data-kw="后视镜 调节" onclick="openHistorySession('如何调节后视镜？')"><div class="content"><div class="question">如何调节后视镜？</div><div class="time">昨天 14:00</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div></div><div class="history-item" data-kw="续航" onclick="openHistorySession('如何查看车辆续航里程？')"><div class="content"><div class="question">如何查看车辆续航里程？</div><div class="time">昨天 10:30</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div></div><div class="history-item" data-kw="首保" onclick="openHistorySession('首保什么时候做？')"><div class="content"><div class="question">首保什么时候做？</div><div class="time">9月1日 16:00</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div></div><div class="history-item" data-kw="保养 周期" onclick="openHistorySession('保养周期是多久？')"><div class="content"><div class="question">保养周期是多久？</div><div class="time">9月1日 14:00</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div></div><div class="history-item" data-kw="冬季 续航" onclick="openHistorySession('冬季续航会减少多少？')"><div class="content"><div class="question">冬季续航会减少多少？</div><div class="time">9月1日 09:00</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div></div><div class="history-item" data-kw="充电 空调" onclick="openHistorySession('充电时能开空调吗？')"><div class="content"><div class="question">充电时能开空调吗？</div><div class="time">8月31日 15:00</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div></div><div class="history-item" data-kw="E27 配置" onclick="openHistorySession('NEXT ERA E27 有什么配置？')"><div class="content"><div class="question">NEXT ERA E27 有什么配置？</div><div class="time">8月31日 11:00</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div></div><div class="history-item" data-kw="Scania 优势" onclick="openHistorySession('Scania 卡车有哪些优势？')"><div class="content"><div class="question">Scania 卡车有哪些优势？</div><div class="time">8月30日 16:00</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div></div><div class="history-item" data-kw="试驾 预约" onclick="openHistorySession('如何预约试驾？')"><div class="content"><div class="question">如何预约试驾？</div><div class="time">8月30日 10:00</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div></div><div class="history-item" data-kw="购车 流程" onclick="openHistorySession('购车流程是怎样的？')"><div class="content"><div class="question">购车流程是怎样的？</div><div class="time">8月29日 14:00</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div></div><div class="history-item" data-kw="金融 方案" onclick="openHistorySession('有没有金融方案？')"><div class="content"><div class="question">有没有金融方案？</div><div class="time">8月29日 09:00</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div></div><div class="history-item" data-kw="方向盘 调节 高度" onclick="openHistorySession('如何调节方向盘高度？')"><div class="content"><div class="question">如何调节方向盘高度？</div><div class="time">8月28日 15:00</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div></div><div class="history-item" data-kw="长文本 截断" onclick="openHistorySession('如何在高速行驶中安全地调节方向盘高度和角度同时还不能影响视线并且要确保锁定牢固？')"><div class="content"><div class="question">如何在高速行驶中安全地调节方向盘高度和角度同时还不能影响视线并且要确保锁定牢固</div><div class="time">8月28日 08:55</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div></div><div class="history-item" data-kw="仪表盘 黄色 感叹号" onclick="openHistorySession('仪表盘上突然亮了一个黄色感叹号报警灯不知道是什么意思')"><div class="content"><div class="question">仪表盘上突然亮了一个黄色感叹号报警灯不知道是什么意思</div><div class="time">8月27日 16:00</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div></div><div class="pull-loading" id="pullLoaderStatic" onclick="loadMoreStatic()">下拉加载更多...</div></div>
+      <div class="empty-state" id="historyEmpty" style="display:none"><div class="icon">📭</div><div class="text">未找到相关会话</div></div>
+      <div class="modal-overlay" id="clearModal" style="display:none"><div class="modal"><div class="title">确认清空全部聊天记录？</div><div class="desc">此操作不可恢复。</div><div class="btns"><button class="btn btn-secondary" onclick="hideEl('clearModal')">取消</button><button class="btn btn-danger" onclick="clearHistory()">确认</button></div></div></div>
+    </div>
+
+    <!-- INTERACTIONS -->
+    <div class="screen" id="screen-interactions">
+      <div class="header"><button class="back" onclick="navTo('home')">←</button><span class="center">沪A·12345 E27</span><div class="header-right-group"><button class="right" onclick="navTo('chat-empty')">新对话</button><button class="auto-voice-btn" onclick="toggleAutoVoice()" title="自动语音播报">🔇</button></div></div>
+      <div class="offline-banner" id="offlineCtx">当前为离线状态，请检查你的网络</div>
+      <div class="chat-body" id="ctxBody"><div class="msg-system">── 已切换到「沪B·67890 G Series ICE」──</div><div class="user-msg" id="ctxU1"><div class="bubble" onclick="showCtxMenu(event,'ctxU1')">方向盘怎么调？</div></div><div class="ai-row"><div class="ai-avatar">🤖</div><div class="ai-col"><div class="ai-name">卡车助手</div><div class="ai-bubble">方向盘下方有一个调节杆，向下推动解锁后即可调整高度和角度，调整完毕后向上拉回锁定。<div class="disclaimer">内容由AI生成，仅供参考</div></div></div></div><div class="msg-actions"><button class="msg-action" onclick="toggleFB(this)">👍</button><button class="msg-action" onclick="toggleFB(this)">👎</button><button class="msg-action" onclick="copyText('方向盘下方有一个调节杆...')">📋 复制</button><button class="msg-action" id="voiceBtnCtx1" onclick="toggleVoiceInline('voiceInlineCtx1','voiceBtnCtx1')">🔊 播报</button></div><div class="ai-row" id="voiceInlineCtx1" style="display:none"><div class="ai-avatar">🤖</div><div class="ai-col"><div class="ai-name">卡车助手</div><div class="ai-bubble">方向盘下方有一个调节杆...<div class="voice-inline"><span class="v-status">🔊 正在播报...</span><button class="v-btn" id="vPauseCtx1" onclick="pauseVoiceInline('vPauseCtx1')">⏸</button><button class="v-btn stop" onclick="stopVoiceInline('voiceInlineCtx1','voiceBtnCtx1')">⏹</button></div></div></div></div><div class="user-msg" id="ctxU2"><div class="bubble" onclick="showCtxMenu(event,'ctxU2')">那调多高合适？</div></div><div class="ai-row"><div class="ai-avatar">🤖</div><div class="ai-col"><div class="ai-name">卡车助手</div><div class="ai-bubble">建议方向盘上沿与肩膀齐平，这样既不影响视线，又能保证手臂自然弯曲。<div class="disclaimer">内容由AI生成，仅供参考</div></div></div></div><div class="msg-actions"><button class="msg-action" onclick="toggleFB(this)">👍</button><button class="msg-action" onclick="toggleFB(this)">👎</button><button class="msg-action" onclick="copyText('建议方向盘上沿与肩膀齐平...')">📋 复制</button><button class="msg-action" id="voiceBtnCtx2" onclick="toggleVoiceInline('voiceInlineCtx2','voiceBtnCtx2')">🔊 播报</button></div><div class="ai-row" id="voiceInlineCtx2" style="display:none"><div class="ai-avatar">🤖</div><div class="ai-col"><div class="ai-name">卡车助手</div><div class="ai-bubble">建议方向盘上沿与肩膀齐平...<div class="voice-inline"><span class="v-status">🔊 正在播报...</span><button class="v-btn" id="vPauseCtx2" onclick="pauseVoiceInline('vPauseCtx2')">⏸</button><button class="v-btn stop" onclick="stopVoiceInline('voiceInlineCtx2','voiceBtnCtx2')">⏹</button></div></div></div></div></div>
+      <div class="chat-input-area" id="ctxInputArea"><div class="quote-bar" id="quoteBar" style="display:none">方向盘怎么调？<button class="close" onclick="hideEl('quoteBar')">×</button></div><textarea class="chat-input" id="inputCtx" placeholder="输入您的问题..." rows="1" oninput="updateSendBtn('inputCtx','sendBtnCtx')"></textarea><button class="send-btn" id="sendBtnCtx" disabled onclick="sendFromUI('inputCtx')">→</button></div>
+      <div class="ctx-menu" id="ctxMenu" style="display:none"><div class="item" onclick="recallMsg()">撤回</div><div class="item" onclick="quoteMsg()">引用</div><div class="item" onclick="copyText('方向盘怎么调？')">复制</div><div class="item danger" onclick="deleteMsg()">删除</div></div>
+    </div>
+
     <!-- MODALS -->
     <div class="screen" id="screen-modals">
-      <div class="header"><span class="center">AI Chat Box</span></div>
-      <div class="chat-body" style="align-items:center;justify-content:center;gap:16px;padding:40px"><button class="btn btn-primary" onclick="showPrivacy()" style="width:200px">隐私协议</button><button class="btn btn-primary" onclick="showEl('clearModalM');navTo('modals')" style="width:200px">清空确认弹窗</button></div>
-      <div class="modal-overlay" id="privacyOverlay" style="display:none"><div class="modal privacy-modal"><div class="title">隐私协议</div><div class="content">感谢您使用卡车助手。我们重视您的隐私和数据安全。<br><br>1. 数据采集：当您使用AI问答功能时，我们会采集您的对话内容、FAQ点击数据，用于优化答案质量。<br><br>2. 数据使用：采集的数据仅用于提升服务质量，不会用于其他商业用途。<br><br>3. 数据安全：您的个人信息和车辆数据将受到严格保护，不会泄露给第三方。<br><br>4. 车辆信息：您的VIN码仅用于匹配知识库，不会在APP端持久化存储。</div><div class="btns"><button class="btn btn-secondary" onclick="hideEl('privacyOverlay');toast('已退出')">不同意</button><button class="btn btn-primary" onclick="acceptPrivacy()">同意</button></div></div></div>
+      <div class="header"><span class="center">弹窗 / 引导</span></div>
+      <div class="chat-body" style="align-items:center;justify-content:center;gap:16px;padding:40px"><button class="btn btn-primary" onclick="showGuide()" style="width:200px">首次使用引导</button><button class="btn btn-primary" onclick="showPrivacy()" style="width:200px">隐私协议</button><button class="btn btn-primary" onclick="showEl('clearModalM');navTo('modals')" style="width:200px">清空确认弹窗</button></div>
+      <div class="modal-overlay" id="guideOverlay" style="display:none"><div class="guide-box"><div class="robot">🤖</div><div class="guide-title">随时随地问我车书相关问题</div><div class="tip">输入文字或点击下方问题卡片即可提问</div><button class="btn btn-primary" onclick="hideEl('guideOverlay');toast('引导已关闭')">知道了</button></div></div>
+      <div class="modal-overlay" id="privacyOverlay" style="display:none"><div class="modal privacy-modal"><div class="title">隐私协议</div><div class="content">感谢您使用卡车助手。我们重视您的隐私和数据安全。<br><br>1. 数据采集：当您使用AI问答功能时，我们会采集您的对话内容、FAQ点击数据，用于优化答案质量。<br><br>2. 数据使用：采集的数据仅用于提升服务质量，不会用于其他商业用途。<br><br>3. 数据安全：您的个人信息和车辆数据将受到严格保护，不会泄露给第三方。<br><br>4. 车辆信息：您的VIN码仅用于匹配知识库，不会在APP端持久化存储。</div><div class="btns"><button class="btn btn-secondary" onclick="hideEl('privacyOverlay');toast('已退出')">不同意</button><button class="btn btn-primary" onclick="hideEl('privacyOverlay');toast('已同意隐私协议')">同意</button></div></div></div>
       <div class="modal-overlay" id="clearModalM" style="display:none"><div class="modal"><div class="title">确认清空全部聊天记录？</div><div class="desc">此操作不可恢复。</div><div class="btns"><button class="btn btn-secondary" onclick="hideEl('clearModalM')">取消</button><button class="btn btn-danger" onclick="hideEl('clearModalM');toast('已清空全部记录')">确认</button></div></div></div>
     </div>
 
-    <div class="modal-overlay" id="dialOverlay" style="display:none"><div class="modal dial-confirm"><div class="title">📞 拨打客服热线</div><div class="phone-num">400-xxx-xxxx</div><div class="desc">确认拨打 Scania 客服热线？</div><div class="btns"><button class="btn btn-secondary" onclick="hideEl('dialOverlay')">取消</button><button class="btn btn-primary" onclick="hideEl('dialOverlay');toast('已拨打客服热线')">确认拨打</button></div></div></div>
     <div class="toast" id="toast" style="display:none"></div>
   </div>
 </div>
 </div>
 
 <script>
-// 密码验证
-function checkPass(){
-  var pw=document.getElementById('passInput').value;
-  if(pw==='scania2026'){document.getElementById('passGate').style.display='none';document.getElementById('mainApp').style.display='flex';sessionStorage.setItem('protoPass','1');}
-  else{document.getElementById('passError').classList.add('show');}
-}
-if(sessionStorage.getItem('protoPass')==='1'){document.getElementById('passGate').style.display='none';document.getElementById('mainApp').style.display='flex';}
-function navTo(name){stopStream();document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});var target=document.getElementById('screen-'+name);if(target)target.classList.add('active');document.querySelectorAll('.side-nav-item').forEach(function(i){i.classList.remove('active');});document.querySelectorAll('.side-nav-item').forEach(function(i){if(i.dataset.screen===name)i.classList.add('active');});hideAllMenus();}
+function navTo(name){stopStream();document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById('screen-'+name).classList.add('active');document.querySelectorAll('.side-nav-item').forEach(function(i){i.classList.remove('active');});document.querySelectorAll('.side-nav-item').forEach(function(i){if(i.dataset.screen===name)i.classList.add('active');});hideAllMenus();var hp=document.getElementById('historyPanel');if(hp)hp.style.display=(name==='history')?'flex':'none';}
 document.querySelectorAll('.side-nav-item[data-screen]').forEach(function(item){item.addEventListener('click',function(){navTo(this.dataset.screen);});});
 function toggleSubNav(id){var el=document.getElementById(id);el.classList.toggle('show');var parent=el.previousElementSibling;if(parent)parent.classList.toggle('expanded');}
 function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(function(){t.style.display='none';},2000);}
 function toggleEl(id){var el=document.getElementById(id);el.style.display=el.style.display==='none'?'block':'none';}
 function hideEl(id){document.getElementById(id).style.display='none';}
 function showEl(id){document.getElementById(id).style.display='flex';}
-function hideAllMenus(){document.querySelectorAll('.vehicle-picker').forEach(function(m){m.style.display='none';});}
-
-// 悬浮按钮拖拽 + 边框吸附
-var fabDrag={startX:0,startY:0,startLeft:0,startTop:0,moved:false};
-function startDrag(e){
-  e.preventDefault();var fab=document.getElementById('assistantFab');
-  var t=e.touches?e.touches[0]:e;
-  fabDrag.startX=t.clientX;fabDrag.startY=t.clientY;
-  fabDrag.startLeft=fab.offsetLeft;fabDrag.startTop=fab.offsetTop;
-  fabDrag.moved=false;fab.classList.add('dragging');
-  document.addEventListener('mousemove',onDrag);document.addEventListener('mouseup',stopDrag);
-  document.addEventListener('touchmove',onDrag,{passive:false});document.addEventListener('touchend',stopDrag);
-}
-function onDrag(e){
-  var fab=document.getElementById('assistantFab');var phone=fab.closest('.phone');
-  var t=e.touches?e.touches[0]:e;
-  var dx=t.clientX-fabDrag.startX;var dy=t.clientY-fabDrag.startY;
-  var newLeft=fabDrag.startLeft+dx;var newTop=fabDrag.startTop+dy;
-  var maxLeft=phone.offsetWidth-fab.offsetWidth;var maxTop=phone.offsetHeight-fab.offsetHeight;
-  if(Math.abs(dx)>3||Math.abs(dy)>3)fabDrag.moved=true;
-  fab.style.left=Math.max(0,Math.min(newLeft,maxLeft))+'px';
-  fab.style.top=Math.max(0,Math.min(newTop,maxTop))+'px';
-  fab.style.right='auto';fab.style.bottom='auto';
-}
-function stopDrag(e){
-  document.removeEventListener('mousemove',onDrag);document.removeEventListener('mouseup',stopDrag);
-  document.removeEventListener('touchmove',onDrag);document.removeEventListener('touchend',stopDrag);
-  var fab=document.getElementById('assistantFab');fab.classList.remove('dragging');
-  var phone=fab.closest('.phone');var center=phone.offsetWidth/2;
-  var fabCenter=fab.offsetLeft+fab.offsetWidth/2;
-  fab.classList.add('snapping');
-  if(fabCenter<center){fab.style.left='16px';fab.style.right='auto';}else{fab.style.left='auto';fab.style.right='16px';}
-  setTimeout(function(){fab.classList.remove('snapping');},350);
-  if(!fabDrag.moved){enterChat();}
-  fabDrag.moved=false;
-}
+function hideAllMenus(){document.querySelectorAll('.ctx-menu,.vehicle-picker').forEach(function(m){m.style.display='none';});}
 function updateSendBtn(inpId,btnId){document.getElementById(btnId).disabled=!document.getElementById(inpId).value.trim();}
 document.querySelectorAll('.faq-session-tab').forEach(function(tab){tab.addEventListener('click',function(){var parent=this.parentElement;var grandparent=parent.parentElement;parent.querySelectorAll('.faq-session-tab').forEach(function(t){t.classList.remove('active');});this.classList.add('active');grandparent.querySelectorAll('.faq-panel').forEach(function(p){p.classList.remove('active');});var panel=document.getElementById(this.dataset.panel);if(panel)panel.classList.add('active');});});
-
-// 首次进入聊天 & 隐私协议
-var chatVisited=false;
-function enterChat(){
-  chatVisited=true;
-  navTo('chat-empty');
-  if(!privacyAccepted()){
-    setTimeout(function(){showEl('privacyFirstOverlay');},100);
-  }
-}
-function privacyAccepted(){return sessionStorage.getItem('privacyAccepted')==='true';}
-function acceptPrivacy(){
-  sessionStorage.setItem('privacyAccepted','true');
-  hideEl('privacyFirstOverlay');hideEl('privacyOverlay');
-  toast('已同意隐私协议');
-}
-function rejectPrivacy(){
-  hideEl('privacyFirstOverlay');
-  chatVisited=false;
-  navTo('home');
-  toast('请同意隐私协议后继续使用');
-}
-
-function sendFromCard(q){if(q&&q.trim()){chatVisited=true;toast('已发送: '+q);navTo('chat-qa');}}
+function sendFromCard(q){if(q&&q.trim()){toast('已发送: '+q);navTo('chat-qa');}}
 function sendFromUI(inpId){var q=document.getElementById(inpId).value;if(!q||!q.trim())return;document.getElementById(inpId).value='';updateSendBtn(inpId,inpId.replace('input','sendBtn'));toast('已发送: '+q);navTo('chat-qa');}
-function newChat(){chatVisited=false;toast('已开启新对话');navTo('chat-empty');}
+function newChat(){toast('已开启新对话');navTo('chat-empty');}
 
 // Streaming
 var streamTimer=null,streamIdx=0;
@@ -435,15 +386,28 @@ document.querySelector('[data-screen="chat-qa-streaming"]').addEventListener('cl
 function toggleArt(id){var art=document.getElementById(id);art.style.display=art.style.display==='block'?'none':'block';}
 function selectVehicle(plate,model,pickerId){hideEl(pickerId);document.querySelectorAll('.vehicle-select').forEach(function(v){v.innerHTML=plate+' '+model+' <span class="arrow">▼</span>';});toast('已切换到: '+plate+' '+model);}
 function switchVeh(plate,model,pickerId){hideEl(pickerId);var body=document.getElementById('qaCompleteBody');var sys=document.createElement('div');sys.className='msg-system';sys.textContent='── 已切换到「'+plate+' '+model+'」──';body.insertBefore(sys,body.firstChild);document.querySelectorAll('.vehicle-select').forEach(function(v){v.innerHTML=plate+' '+model+' <span class="arrow">▼</span>';});toast('已切换到: '+plate+' '+model);}
-var autoVoice=false;
-function toggleAutoVoice(){autoVoice=!autoVoice;document.querySelectorAll('.auto-voice-btn').forEach(function(b){if(autoVoice){b.classList.add('on');b.textContent='\uD83D\uDD0A';}else{b.classList.remove('on');b.textContent='\uD83D\uDD07';}});if(autoVoice)toast('后续回答将自动语音播报');else toast('已关闭自动语音播报');}
-function showNetToast(){var t=document.getElementById('netToast');t.style.display='block';setTimeout(function(){t.style.display='none';},2500);}
+function showCtxMenu(e,msgId){e.stopPropagation();hideAllMenus();var menu=document.getElementById('ctxMenu');menu.style.display='block';menu.style.top=Math.min(e.clientY-120,500)+'px';menu.style.left=Math.min(e.clientX-200,200)+'px';menu._targetId=msgId;setTimeout(function(){document.addEventListener('click',hideAllMenus,{once:true});},100);}
+function recallMsg(){hideAllMenus();var id=document.getElementById('ctxMenu')._targetId;if(id){var el=document.getElementById(id);if(el){var txt=el.querySelector('.bubble').textContent;document.querySelectorAll('.chat-input').forEach(function(i){i.value=txt;i.focus();});document.querySelectorAll('.send-btn').forEach(function(b){b.disabled=false;});el.style.display='none';}}toast('已撤回，文本已回填输入框');}
+function quoteMsg(){hideAllMenus();showEl('quoteBar');document.getElementById('inputCtx').focus();toast('已引用消息');}
+function deleteMsg(){hideAllMenus();var id=document.getElementById('ctxMenu')._targetId;if(id){var el=document.getElementById(id);if(el)el.style.display='none';}toast('已删除');}
 function toggleFB(btn){var actions=btn.parentElement.querySelectorAll('.msg-action');actions.forEach(function(a){a.classList.remove('active');});btn.classList.add('active');toast('感谢反馈');}
-function copyText(text){navigator.clipboard.writeText(text).then(function(){toast('已复制');}).catch(function(){toast('已复制');});}
 var activeVoice=null;
 function toggleVoiceInline(inlineId,btnId){var inline=document.getElementById(inlineId),btn=document.getElementById(btnId);if(inline.style.display==='flex'){inline.style.display='none';btn.classList.remove('active');btn.textContent='🔊 播报';activeVoice=null;return;}if(activeVoice&&activeVoice!==inlineId){document.getElementById(activeVoice).style.display='none';document.querySelectorAll('.msg-action.active').forEach(function(a){a.classList.remove('active');a.textContent='🔊 播报';});}inline.style.display='flex';btn.classList.add('active');btn.textContent='⏸ 播放中';activeVoice=inlineId;}
 function pauseVoiceInline(btnId){var btn=document.getElementById(btnId);btn.textContent=btn.textContent==='⏸'?'▶':'⏸';}
 function stopVoiceInline(inlineId,btnId){document.getElementById(inlineId).style.display='none';var btn=document.getElementById(btnId);if(btn){btn.classList.remove('active');btn.textContent='🔊 播报';}if(activeVoice===inlineId)activeVoice=null;}
+var autoVoice=false;
+function toggleAutoVoice(){autoVoice=!autoVoice;document.querySelectorAll('.auto-voice-btn').forEach(function(b){if(autoVoice){b.classList.add('on');b.textContent='\uD83D\uDD0A';}else{b.classList.remove('on');b.textContent='\uD83D\uDD07';}});if(autoVoice)toast('后续回答将自动语音播报');else toast('已关闭自动语音播报');}
+function copyText(text){navigator.clipboard.writeText(text).then(function(){toast('已复制');}).catch(function(){toast('已复制');});}
+function showNetToast(){var t=document.getElementById('netToast');t.style.display='block';setTimeout(function(){t.style.display='none';},2500);}
+
+// History
+function filterHistory(){var q=document.getElementById('searchInput').value.toLowerCase();var items=document.querySelectorAll('#historyList .history-item');var found=false;items.forEach(function(item){var kw=(item.dataset.kw||'').toLowerCase();if(!q||kw.includes(q)){item.style.display='flex';found=true;}else{item.style.display='none';}});document.getElementById('historyEmpty').style.display=found?'none':'block';document.querySelectorAll('.pull-loading').forEach(function(l){l.style.display=q?'none':'block';});}
+function clearHistory(){hideEl('clearModal');document.getElementById('historyList').innerHTML='';document.getElementById('historyEmpty').style.display='block';document.getElementById('historyEmpty').querySelector('.icon').textContent='📭';document.getElementById('historyEmpty').querySelector('.text').textContent='暂无历史会话';document.getElementById('searchInput').value='';toast('已清空全部记录');}
+function openHistorySession(q){toast('已打开会话: '+q);navTo('chat-qa');}
+function deleteHistoryItem(btn){var item=btn.closest('.history-item');item.style.opacity='0';item.style.transform='translateX(-20px)';item.style.transition='all 0.3s';setTimeout(function(){item.remove();if(document.querySelectorAll('#historyList .history-item').length===0){document.getElementById('historyEmpty').style.display='block';}toast('已删除');},300);}
+function resetHistory(){var list=document.getElementById('historyList');list.innerHTML='';var data=[['方向盘怎么调？','今天 14:30'],['仪表盘报警灯亮了怎么办？','今天 13:15'],['如何换挡？','今天 11:00'],['如何实名认证？','今天 09:30'],['车辆充电注意事项有哪些？','昨天 17:00'],['为什么要实名认证？','昨天 15:00'],['如何调节后视镜？','昨天 14:00'],['如何查看车辆续航里程？','昨天 10:30'],['首保什么时候做？','9月1日 16:00'],['保养周期是多久？','9月1日 14:00'],['冬季续航会减少多少？','9月1日 09:00'],['充电时能开空调吗？','8月31日 15:00'],['NEXT ERA E27 有什么配置？','8月31日 11:00'],['Scania 卡车有哪些优势？','8月30日 16:00'],['如何预约试驾？','8月30日 10:00'],['购车流程是怎样的？','8月29日 14:00'],['有没有金融方案？','8月29日 09:00'],['如何调节方向盘高度？','8月28日 15:00'],['如何在高速行驶中安全地调节方向盘高度和角度同时还不能影响视线并且要确保锁定牢固','8月28日 08:55'],['仪表盘上突然亮了一个黄色感叹号报警灯不知道是什么意思','8月27日 16:00']];for(var i=0;i<data.length;i++){var d=data[i];var item=document.createElement('div');item.className='history-item';item.setAttribute('data-kw',d[0]);item.innerHTML='<div class="content"><div class="question">'+d[0]+'</div><div class="time">'+d[1]+'</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div>';item.onclick=(function(q){return function(){openHistorySession(q);};})(d[0]);list.appendChild(item);}var loader=document.createElement('div');loader.className='pull-loading';loader.id='pullLoaderNormal';loader.innerHTML='下拉加载更多...';loader.onclick=function(){loadMoreNormal();};list.appendChild(loader);document.getElementById('historyEmpty').style.display='none';}
+function loadMoreNormal(){var loader=document.getElementById('pullLoaderNormal');if(!loader)return;loader.innerHTML='<span class="spinner"></span>加载中...';var list=document.getElementById('historyList');setTimeout(function(){var extra=[['如何查看保养记录？','8月27日 12:00'],['如何联系销售顾问？','8月27日 08:00'],['远程控制怎么用？','8月26日 16:00'],['数字钥匙支持哪些手机？','8月26日 10:00'],['车辆定位功能怎么开启？','8月25日 14:00'],['如何设置定时充电？','8月25日 09:00'],['车辆OTA升级怎么做？','8月24日 15:00'],['如何查看电池健康度？','8月24日 11:00'],['能量回收怎么调节？','8月23日 16:00'],['空调滤芯多久换一次？','8月23日 10:00']];for(var i=0;i<extra.length;i++){var d=extra[i];var item=document.createElement('div');item.className='history-item';item.setAttribute('data-kw',d[0]);item.innerHTML='<div class="content"><div class="question">'+d[0]+'</div><div class="time">'+d[1]+'</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div>';item.onclick=(function(q){return function(){openHistorySession(q);};})(d[0]);list.insertBefore(item,loader);}loader.innerHTML='没有更多了';loader.style.cursor='default';loader.onclick=null;},1000);}
+function loadMoreStatic(){var loader=document.getElementById('pullLoaderStatic');if(!loader)return;loader.innerHTML='<span class="spinner"></span>加载中...';var list=document.getElementById('historyList');setTimeout(function(){var extra=[['如何查看保养记录？','8月27日 12:00'],['如何联系销售顾问？','8月27日 08:00'],['远程控制怎么用？','8月26日 16:00'],['数字钥匙支持哪些手机？','8月26日 10:00'],['车辆定位功能怎么开启？','8月25日 14:00'],['如何设置定时充电？','8月25日 09:00'],['车辆OTA升级怎么做？','8月24日 15:00'],['如何查看电池健康度？','8月24日 11:00'],['能量回收怎么调节？','8月23日 16:00'],['空调滤芯多久换一次？','8月23日 10:00']];for(var i=0;i<extra.length;i++){var d=extra[i];var item=document.createElement('div');item.className='history-item';item.setAttribute('data-kw',d[0]);item.innerHTML='<div class="content"><div class="question">'+d[0]+'</div><div class="time">'+d[1]+'</div></div><span class="arrow">›</span><div class="delete-swipe" onclick="deleteHistoryItem(this);event.stopPropagation()">删除</div>';item.onclick=(function(q){return function(){openHistorySession(q);};})(d[0]);list.insertBefore(item,loader);}loader.innerHTML='没有更多了';loader.style.cursor='default';loader.onclick=null;},1000);}
 
 // Reject logic (shared by boundary)
 var rejectCount=0,lastQuery='';
@@ -455,13 +419,13 @@ function resetReject(){rejectCount=0;lastQuery='';}
 // Boundary
 function sendBoundary(q){navTo('chat-boundary');var inp=document.getElementById('inputBoundary');inp.value=q;updateSendBtn('inputBoundary','sendBtnBoundary');sendBoundaryMsg();}
 function sendBoundaryMsgFromCard(q){navTo('chat-boundary');var inp=document.getElementById('inputBoundary');inp.value=q;updateSendBtn('inputBoundary','sendBtnBoundary');sendBoundaryMsg();}
-function sendBoundaryMsg(){var inp=document.getElementById('inputBoundary');var q=inp.value.trim();if(!q)return;inp.value='';updateSendBtn('inputBoundary','sendBtnBoundary');var screen=document.getElementById('screen-chat-boundary');var body=screen.querySelector('.chat-body');var type=detectRejectType(q);var resp=getRejectResponse(type);var isNormal=(type==='normal'||type==='competitor'||type==='vague');if(isNormal)rejectCount++;else rejectCount=0;var um=document.createElement('div');um.className='user-msg';um.innerHTML='<div class="bubble">'+q+'</div>';body.appendChild(um);var think=document.createElement('div');think.className='think-row';think.id='bt'+Date.now();think.innerHTML='<div class="ai-avatar">🤖</div><div class="ai-col"><div class="ai-name">卡车助手</div><div class="think-box"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div><span class="think-status">正在查找...</span></div></div>';body.appendChild(think);body.scrollTop=body.scrollHeight;var text=resp.text;var showSug=resp.showSuggestions&&(isNormal?rejectCount<=2:true);var showEsc=resp.showEscalation||(isNormal&&rejectCount>=3);setTimeout(function(){think.remove();var aiRow=document.createElement('div');aiRow.className='ai-row';var bid='btxt'+Date.now();aiRow.innerHTML='<div class="ai-avatar">🤖</div><div class="ai-col"><div class="ai-name">卡车助手</div><div class="ai-bubble" id="'+bid+'"><span class="streaming-cursor"></span></div></div>';body.appendChild(aiRow);var idx=0;var bubble=document.getElementById(bid);var timer=setInterval(function(){if(idx<text.length){idx++;bubble.innerHTML=text.substring(0,idx)+'<span class="streaming-cursor"></span>';body.scrollTop=body.scrollHeight;}else{clearInterval(timer);bubble.innerHTML=text+'<div class="disclaimer">内容由AI生成，仅供参考</div>';var actDiv=document.createElement('div');actDiv.className='msg-actions';actDiv.innerHTML='<button class="msg-action" onclick="toggleFB(this)">👍</button><button class="msg-action" onclick="toggleFB(this)">👎</button><button class="msg-action" onclick="copyText(\''+text.replace(/'/g,"\\'").substring(0,30)+'...\')">📋 复制</button><button class="msg-action" onclick="toggleVoiceInline(\'vi'+bid+'\',\'vb'+bid+'\')" id="vb'+bid+'">🔊 播报</button>';aiRow.querySelector('.ai-col').appendChild(actDiv);var voiceDiv=document.createElement('div');voiceDiv.className='ai-row';voiceDiv.id='vi'+bid;voiceDiv.style.display='none';voiceDiv.innerHTML='<div class="ai-avatar">🤖</div><div class="ai-col"><div class="ai-name">卡车助手</div><div class="ai-bubble">'+text.replace(/\n/g,'<br>').substring(0,60)+'...<div class="voice-inline"><span class="v-status">🔊 正在播报...</span><button class="v-btn" onclick="pauseVoiceInline(\'vp'+bid+'\')" id="vp'+bid+'">⏸</button><button class="v-btn stop" onclick="stopVoiceInline(\'vi'+bid+'\',\'vb'+bid+'\')">⏹</button></div></div></div>';body.appendChild(voiceDiv);if(showSug){var rid='b'+Date.now();var sugDiv=document.createElement('div');sugDiv.className='reject-box';var sugHTML='<div class="text">您可能还想了解：</div><div class="suggestions">';var items=rejectSuggestions[rejectCount%rejectSuggestions.length];for(var i=0;i<items.length;i++){sugHTML+='<div class="suggestion" onclick="sendBoundarySuggestion(this.textContent)">'+items[i]+'</div>';}sugHTML+='</div>';sugDiv.innerHTML=sugHTML;body.appendChild(sugDiv);}if(showEsc){var escDiv=document.createElement('div');escDiv.className='escalation';escDiv.innerHTML='<div class="esc-title">📞 需要人工帮助？</div><div class="esc-text">'+resp.escText+'</div><div class="esc-phone" onclick="showEl(\'dialOverlay\')">📞 拨打客服热线</div>';body.appendChild(escDiv);}body.scrollTop=body.scrollHeight;}},60);},600);}
+function sendBoundaryMsg(){var inp=document.getElementById('inputBoundary');var q=inp.value.trim();if(!q)return;inp.value='';updateSendBtn('inputBoundary','sendBtnBoundary');var screen=document.getElementById('screen-chat-boundary');var body=screen.querySelector('.chat-body');var type=detectRejectType(q);var resp=getRejectResponse(type);var isNormal=(type==='normal'||type==='competitor'||type==='vague');if(isNormal)rejectCount++;else rejectCount=0;var um=document.createElement('div');um.className='user-msg';um.innerHTML='<div class="bubble">'+q+'</div>';body.appendChild(um);var think=document.createElement('div');think.className='think-row';think.id='bt'+Date.now();think.innerHTML='<div class="ai-avatar">🤖</div><div class="ai-col"><div class="ai-name">卡车助手</div><div class="think-box"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div><span class="think-status">正在查找...</span></div></div>';body.appendChild(think);body.scrollTop=body.scrollHeight;var text=resp.text;var showSug=resp.showSuggestions&&(isNormal?rejectCount<=2:true);var showEsc=resp.showEscalation||(isNormal&&rejectCount>=3);setTimeout(function(){think.remove();var aiRow=document.createElement('div');aiRow.className='ai-row';var bid='btxt'+Date.now();aiRow.innerHTML='<div class="ai-avatar">🤖</div><div class="ai-col"><div class="ai-name">卡车助手</div><div class="ai-bubble" id="'+bid+'"><span class="streaming-cursor"></span></div></div>';body.appendChild(aiRow);var idx=0;var bubble=document.getElementById(bid);var timer=setInterval(function(){if(idx<text.length){idx++;bubble.innerHTML=text.substring(0,idx)+'<span class="streaming-cursor"></span>';body.scrollTop=body.scrollHeight;}else{clearInterval(timer);bubble.innerHTML=text+'<div class="disclaimer">内容由AI生成，仅供参考</div>';var rid='b'+Date.now();var actDiv=document.createElement('div');actDiv.className='msg-actions';actDiv.innerHTML='<button class="msg-action" onclick="toggleFB(this)">👍</button><button class="msg-action" onclick="toggleFB(this)">👎</button><button class="msg-action" onclick="copyText(\''+text.replace(/'/g,"\\'")+'\')">📋 复制</button><button class="msg-action" id="voiceBtn'+rid+'" onclick="toggleVoiceInline(\'voiceInline'+rid+'\',\'voiceBtn'+rid+'\')">🔊 播报</button>';body.appendChild(actDiv);var viDiv=document.createElement('div');viDiv.className='ai-row';viDiv.id='voiceInline'+rid;viDiv.style.display='none';viDiv.innerHTML='<div class="ai-avatar">🤖</div><div class="ai-col"><div class="ai-name">卡车助手</div><div class="ai-bubble">'+text+'<div class="voice-inline"><span class="v-status">🔊 正在播报...</span><button class="v-btn" id="vPause'+rid+'" onclick="pauseVoiceInline(\'vPause'+rid+'\')">⏸</button><button class="v-btn stop" onclick="stopVoiceInline(\'voiceInline'+rid+'\',\'voiceBtn'+rid+'\')">⏹</button></div></div></div>';body.appendChild(viDiv);if(showSug){var sIdx=Math.max(0,(rejectCount-1))%rejectSuggestions.length;var sugDiv=document.createElement('div');sugDiv.className='msg-actions';sugDiv.style.padding='0 0 0 36px';rejectSuggestions[sIdx].forEach(function(s){var sug=document.createElement('button');sug.className='msg-action';sug.textContent='💡 '+s;sug.onclick=function(){sendBoundarySuggestion(s);};sugDiv.appendChild(sug);});body.appendChild(sugDiv);}if(showEsc){var esc=document.createElement('div');esc.className='escalation';esc.innerHTML='<div class="esc-title">💡 需要更多帮助？</div><div class="esc-text">'+(resp.escText||'拨打我们的客服热线，人工客服将为您解答。')+'</div><a class="esc-phone" href="tel:400-xxx-xxxx" onclick="event.preventDefault();toast(\'正在拨打 400-xxx-xxxx\')">📞 拨打 400-xxx-xxxx</a>';body.appendChild(esc);}body.scrollTop=body.scrollHeight;}},30);},1000);}
 function sendBoundarySuggestion(s){var inp=document.getElementById('inputBoundary');inp.value=s;updateSendBtn('inputBoundary','sendBtnBoundary');sendBoundaryMsg();}
 
 function toggleOffline(){document.querySelectorAll('.offline-banner').forEach(function(b){b.classList.toggle('show');});var label=document.getElementById('offlineToggleLabel');if(label){var isOff=document.querySelector('.offline-banner.show');label.textContent=isOff?'🟢 恢复在线':'🔴 模拟离线';}}
+function showGuide(){navTo('modals');showEl('guideOverlay');}
 function showPrivacy(){navTo('modals');showEl('privacyOverlay');}
-document.addEventListener('click',function(e){if(!e.target.closest('.vehicle-picker')&&!e.target.closest('.vehicle-select')){hideAllMenus();}});
+document.addEventListener('click',function(e){if(!e.target.closest('.ctx-menu')&&!e.target.closest('.bubble')&&!e.target.closest('.vehicle-picker')&&!e.target.closest('.vehicle-select')){hideAllMenus();}});
 </script>
-</div>
 </body>
 </html>
