@@ -51,13 +51,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC"
 .chat-input-area { background: var(--bg-card); border-top: 1px solid var(--border); padding: 10px 16px; display: flex; align-items: flex-end; gap: 8px; padding-bottom: 22px; flex-shrink: 0; position: relative; }
 .chat-input { flex: 1; border: 1px solid var(--border); border-radius: 20px; padding: 10px 16px; font-size: 14px; outline: none; resize: none; max-height: 100px; background: var(--bg-input); color: var(--text); }
 .chat-input::placeholder { color: var(--text-secondary); }
-.chat-input:focus { border-color: var(--gold); }
+.chat-input:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(31, 100%, 83%, 0.2); }
 .send-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--gold); border: none; color: #1a1a1a; font-size: 16px; font-weight: 700; cursor: pointer; flex-shrink: 0; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
 .send-btn:disabled { background: #3a3530; color: #666; cursor: default; }
 .send-btn:hover:not(:disabled) { background: var(--gold-dark); }
-.stop-fab { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); background: var(--bg-card); border: 1px solid var(--danger); color: var(--danger); padding: 8px 20px; border-radius: 20px; font-size: 13px; cursor: pointer; z-index: 10; display: none; transition: all 0.2s; }
-.stop-fab:hover { background: rgba(192, 57, 43, 0.1); }
-.stop-fab.show { display: block; }
+
 .ai-row { display: flex; gap: 8px; align-items: flex-start; margin: 4px 0; }
 .ai-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--gold); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 16px; }
 .ai-col { flex: 1; min-width: 0; }
@@ -66,6 +64,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC"
 .ai-bubble .disclaimer { font-size: 11px; color: var(--text-secondary); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
 .ai-link { color: var(--gold); text-decoration: underline; cursor: pointer; }
 .ai-img { max-width: 100%; border-radius: 10px; margin: 8px 0; border: 1px solid var(--border); }
+.img-fail { display: flex; align-items: center; gap: 8px; padding: 12px; background: var(--bg-input); border-radius: 10px; border: 1px dashed var(--border); margin: 8px 0; }
 .art-expand { background: var(--bg-input); border: 1px solid var(--border); border-radius: 10px; margin-top: 8px; padding: 12px; display: none; }
 .art-expand .art-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
 .art-expand .art-content { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
@@ -153,6 +152,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC"
 .quick-follow .qf-title { font-size: 11px; color: var(--text-secondary); margin-bottom: 6px; }
 .quick-follow .qf-item { padding: 8px 12px; background: rgba(31, 100%, 83%, 0.06); border: 1px solid rgba(31, 100%, 83%, 0.15); border-radius: 8px; font-size: 12px; color: var(--gold); cursor: pointer; margin-bottom: 4px; transition: all 0.2s; }
 .quick-follow .qf-item:hover { background: rgba(31, 100%, 83%, 0.12); }
+.hidden-module { display: none; }
 .dial-confirm { text-align: left; }
 .dial-confirm .phone-num { font-size: 20px; color: var(--text); font-weight: 700; margin: 8px 0; text-align: center; }
 .toast { position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: var(--gold); padding: 10px 24px; border-radius: 24px; font-size: 13px; z-index: 300; pointer-events: none; animation: toastIn 0.3s ease; }
@@ -308,7 +308,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC"
       <div class="header"><button class="back" onclick="stopStream();navTo('home')">←</button><span class="center">AI Chat Box</span><button class="vehicle-select">沪A·12345 E27 <span class="arrow">▼</span></button><div class="header-right-group"><button class="right" onclick="stopStream();navTo('chat-empty')">新对话</button><button class="auto-voice-btn" onclick="toggleAutoVoice()" title="自动语音播报">🔇</button></div></div>
       <div class="offline-banner" id="offlineStream">当前为离线状态，请检查你的网络</div>
       <div class="chat-body" id="streamBody"><div class="user-msg"><div class="bubble">方向盘怎么调？</div></div><div class="think-row" id="streamThink"><div class="ai-avatar">🤖</div><div class="ai-col"><div class="ai-name">卡车助手</div><div class="think-box"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div><span class="think-status" id="thinkStatus">正在查找车书...</span></div></div></div><div class="ai-row" id="streamAnswer" style="display:none"><div class="ai-avatar">🤖</div><div class="ai-col"><div class="ai-name">卡车助手</div><div class="ai-bubble" id="streamBubble"><span class="streaming-cursor" id="streamCursor"></span></div></div></div><div class="msg-actions" id="streamActions" style="display:none"><button class="msg-action" onclick="toggleFB(this)">👍</button><button class="msg-action" onclick="toggleFB(this)">👎</button><button class="msg-action" onclick="copyText('方向盘调节步骤...')">📋 复制</button><button class="msg-action" id="voiceBtnStream" onclick="toggleVoiceInline('voiceInlineStream','voiceBtnStream')">🔊 播报</button></div><div class="ai-row" id="voiceInlineStream" style="display:none"><div class="ai-avatar">🤖</div><div class="ai-col"><div class="ai-name">卡车助手</div><div class="ai-bubble"><span id="voiceStreamText">方向盘调节步骤如下：...</span><div class="voice-inline"><span class="v-status">🔊 正在播报...</span><button class="v-btn" id="vPauseStream" onclick="pauseVoiceInline('vPauseStream')">⏸</button><button class="v-btn stop" onclick="stopVoiceInline('voiceInlineStream','voiceBtnStream')">⏹</button></div></div></div></div></div>
-      <div class="chat-input-area"><div class="stop-fab" id="streamStopFab" onclick="stopStreamingFull()">⏹ 停止生成</div><textarea class="chat-input" id="inputStream" placeholder="输入您的问题..." rows="1" oninput="updateSendBtn('inputStream','sendBtnStream')"></textarea><button class="send-btn" id="sendBtnStream" disabled onclick="sendFromUI('inputStream')">→</button></div>
+      <div class="chat-input-area"><textarea class="chat-input" id="inputStream" placeholder="输入您的问题..." rows="1" oninput="updateSendBtn('inputStream','sendBtnStream')"></textarea><button class="send-btn" id="sendBtnStream" disabled onclick="sendFromUI('inputStream')">→</button></div>
     </div>
 
     <!-- BOUNDARY SCENARIOS -->
@@ -337,6 +337,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC"
     </div>
 
     <div class="modal-overlay" id="dialOverlay" style="display:none"><div class="modal dial-confirm"><div class="title">📞 拨打客服热线</div><div class="phone-num">400-xxx-xxxx</div><div class="desc">确认拨打 Scania 客服热线？</div><div class="btns"><button class="btn btn-secondary" onclick="hideEl('dialOverlay')">取消</button><button class="btn btn-primary" onclick="hideEl('dialOverlay');toast('已拨打客服热线')">确认拨打</button></div></div></div>
+    <div class="modal-overlay" id="newChatModal" style="display:none"><div class="modal"><div class="title">开启新对话</div><div class="desc">开启新对话将清空当前聊天记录，确认？</div><div class="btns"><button class="btn btn-secondary" onclick="hideEl('newChatModal')">取消</button><button class="btn btn-primary" onclick="hideEl('newChatModal');doNewChat()">确认</button></div></div></div>
     <div class="toast" id="toast" style="display:none"></div>
   </div>
 </div>
@@ -420,15 +421,16 @@ function rejectPrivacy(){
 
 function sendFromCard(q){if(q&&q.trim()){chatVisited=true;toast('已发送: '+q);navTo('chat-qa');}}
 function sendFromUI(inpId){var q=document.getElementById(inpId).value;if(!q||!q.trim())return;document.getElementById(inpId).value='';updateSendBtn(inpId,inpId.replace('input','sendBtn'));toast('已发送: '+q);navTo('chat-qa');}
-function newChat(){chatVisited=false;toast('已开启新对话');navTo('chat-empty');}
+function newChat(){showEl('newChatModal');}
+function doNewChat(){chatVisited=false;toast('已开启新对话');navTo('chat-empty');}
 
 // Streaming
 var streamTimer=null,streamIdx=0;
 var streamFullText='方向盘调节步骤如下：\n\n1. 找到方向盘下方的调节杆\n2. 向下推动调节杆解锁\n3. 调整方向盘到合适的高度和角度\n4. 向上拉回调节杆锁定位置\n\n推荐：方向盘上沿与肩膀齐平，手臂自然弯曲约120度。\n\n安全提示：请勿在行驶中调节方向盘。';
-function startStream(){var think=document.getElementById('streamThink'),status=document.getElementById('thinkStatus'),answer=document.getElementById('streamAnswer'),bubble=document.getElementById('streamBubble'),fab=document.getElementById('streamStopFab'),actions=document.getElementById('streamActions');think.style.display='flex';answer.style.display='none';fab.classList.add('show');actions.style.display='none';status.textContent='正在查找车书...';streamIdx=0;bubble.innerHTML='<span class="streaming-cursor" id="streamCursor"></span>';clearTimeout(streamTimer);streamTimer=setTimeout(function(){status.textContent='正在组织答案...';streamTimer=setTimeout(function(){think.style.display='none';answer.style.display='flex';actions.style.display='flex';streamTimer=setInterval(streamChar,60);},800);},1000);}
-function streamChar(){var bubble=document.getElementById('streamBubble');if(streamIdx<streamFullText.length){streamIdx++;bubble.innerHTML=streamFullText.substring(0,streamIdx).replace(/\n/g,'<br>')+'<span class="streaming-cursor" id="streamCursor"></span>';document.getElementById('streamBody').scrollTop=document.getElementById('streamBody').scrollHeight;}else{clearTimeout(streamTimer);bubble.innerHTML=streamFullText.replace(/\n/g,'<br>')+'<div class="disclaimer">内容由AI生成，仅供参考</div>';document.getElementById('streamStopFab').classList.remove('show');}}
-function stopStreamingFull(){clearTimeout(streamTimer);document.getElementById('streamThink').style.display='none';document.getElementById('streamStopFab').classList.remove('show');var bubble=document.getElementById('streamBubble'),answer=document.getElementById('streamAnswer'),actions=document.getElementById('streamActions');if(streamIdx>0){answer.style.display='flex';actions.style.display='flex';bubble.innerHTML=streamFullText.substring(0,streamIdx).replace(/\n/g,'<br>')+'<div class="disclaimer">内容由AI生成，仅供参考</div>';}else{answer.style.display='none';actions.style.display='none';}toast('已停止生成');}
-function stopStream(){clearTimeout(streamTimer);var t=document.getElementById('streamThink');if(t)t.style.display='none';document.getElementById('streamStopFab').classList.remove('show');}
+function startStream(){var think=document.getElementById('streamThink'),status=document.getElementById('thinkStatus'),answer=document.getElementById('streamAnswer'),bubble=document.getElementById('streamBubble'),actions=document.getElementById('streamActions'),sendBtn=document.getElementById('sendBtnStream');think.style.display='flex';answer.style.display='none';actions.style.display='none';sendBtn.textContent='⏹';sendBtn.onclick=stopStreamingFull;sendBtn.disabled=false;status.textContent='正在查找车书...';streamIdx=0;bubble.innerHTML='<span class="streaming-cursor" id="streamCursor"></span>';clearTimeout(streamTimer);streamTimer=setTimeout(function(){status.textContent='正在组织答案...';streamTimer=setTimeout(function(){think.style.display='none';answer.style.display='flex';actions.style.display='flex';streamTimer=setInterval(streamChar,60);},800);},1000);}
+function streamChar(){var bubble=document.getElementById('streamBubble');if(streamIdx<streamFullText.length){streamIdx++;bubble.innerHTML=streamFullText.substring(0,streamIdx).replace(/\n/g,'<br>')+'<span class="streaming-cursor" id="streamCursor"></span>';document.getElementById('streamBody').scrollTop=document.getElementById('streamBody').scrollHeight;}else{clearTimeout(streamTimer);bubble.innerHTML=streamFullText.replace(/\n/g,'<br>')+'<div class="disclaimer">内容由AI生成，仅供参考</div>';var sendBtn=document.getElementById('sendBtnStream');sendBtn.textContent='→';sendBtn.onclick=function(){sendFromUI('inputStream');};sendBtn.disabled=true;}}
+function stopStreamingFull(){clearTimeout(streamTimer);document.getElementById('streamThink').style.display='none';var bubble=document.getElementById('streamBubble'),answer=document.getElementById('streamAnswer'),actions=document.getElementById('streamActions'),sendBtn=document.getElementById('sendBtnStream');sendBtn.textContent='→';sendBtn.onclick=function(){sendFromUI('inputStream');};sendBtn.disabled=true;if(streamIdx>0){answer.style.display='flex';actions.style.display='flex';bubble.innerHTML=streamFullText.substring(0,streamIdx).replace(/\n/g,'<br>')+'<div class="disclaimer">内容由AI生成，仅供参考</div>';}else{answer.style.display='none';actions.style.display='none';}toast('已停止生成');}
+function stopStream(){clearTimeout(streamTimer);var t=document.getElementById('streamThink');if(t)t.style.display='none';var sendBtn=document.getElementById('sendBtnStream');if(sendBtn){sendBtn.textContent='→';sendBtn.onclick=function(){sendFromUI('inputStream');};sendBtn.disabled=true;}}
 var streamStarted=false;
 document.querySelector('[data-screen="chat-qa-streaming"]').addEventListener('click',function(){if(!streamStarted){streamStarted=true;startStream();}});
 
