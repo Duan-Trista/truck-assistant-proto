@@ -337,7 +337,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC"
     </div>
 
     <div class="modal-overlay" id="dialOverlay" style="display:none"><div class="modal dial-confirm"><div class="title">📞 拨打客服热线</div><div class="phone-num">400-xxx-xxxx</div><div class="desc">确认拨打 Scania 客服热线？</div><div class="btns"><button class="btn btn-secondary" onclick="hideEl('dialOverlay')">取消</button><button class="btn btn-primary" onclick="hideEl('dialOverlay');toast('已拨打客服热线')">确认拨打</button></div></div></div>
-    <div class="modal-overlay" id="newChatModal" style="display:none"><div class="modal"><div class="title">开启新对话</div><div class="desc">开启新对话将清空当前聊天记录，确认？</div><div class="btns"><button class="btn btn-secondary" onclick="hideEl('newChatModal')">取消</button><button class="btn btn-primary" onclick="hideEl('newChatModal');doNewChat()">确认</button></div></div></div>
+    <div class="modal-overlay" id="newChatModal" style="display:none"><div class="modal"><div class="title">开启新对话</div><div class="desc">当前聊天记录将被清空，确定要开始新对话吗？</div><div class="btns"><button class="btn btn-secondary" onclick="hideEl('newChatModal')">取消</button><button class="btn btn-primary" onclick="hideEl('newChatModal');doNewChat()">确认</button></div></div></div>
     <div class="toast" id="toast" style="display:none"></div>
   </div>
 </div>
